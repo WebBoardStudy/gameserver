@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace DummyClient
+namespace DummyClient;
+
+internal class Program
 {
-    class Program
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
+        Console.WriteLine("Hello, World!");
     }
-}
+}   
