@@ -1,76 +1,50 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace ServerCore;
 
-internal class SpinLock
-{
-    private volatile int _lock;
-
-    public void Acquire()
-    {
-        var expected = 0;
-        var desired = 1;
-        while (true)
-            if (Interlocked.CompareExchange(ref _lock, desired, expected) == expected)
-                break;
-    }
-
-    public void UnAcquire()
-    {
-        _lock = 0;
-    }
-}
-
 internal class Program
 {
-    //private static SpinLock _spinLock = new();
-    private static volatile int _num = 0;
-    private static ReadWriteLock _readWriteLock = new ReadWriteLock();
-    
-    // private static void Thread1()
-    // {
-    //     for (var i = 0; i < 10000000; i++)
-    //     {
-    //         _spinLock.Acquire();
-    //         _num += 1;
-    //         _spinLock.UnAcquire();
-    //     }
-    // }
-
-    // private static void Thread2()
-    // {
-    //     for (var i = 0; i < 10000000; i++)
-    //     {
-    //         _spinLock.Acquire();
-    //         _num -= 1;
-    //         _spinLock.UnAcquire();
-    //     }
-    // }
-
     private static void Main(string[] args)
     {
-        var t1 = new Task(delegate
-        {
-            for (int i = 0; i < 1000000; i++)
-            {
-                _readWriteLock.WriteLock();
-                _num++;
-                _readWriteLock.WriteUnlock();
-            }
-        });
-        var t2 = new Task(delegate
-        {
-            for (int i = 0; i < 1000000; i++)
-            {
-                _readWriteLock.WriteLock();
-                _num--;
-                _readWriteLock.WriteUnlock();
-            }
-        });
-        t1.Start();
-        t2.Start();
-        Task.WaitAll(t1, t2);
+        var host = Dns.GetHostName();
+        var hostEntry = Dns.GetHostEntry(host);
+        var ipAddress = hostEntry.AddressList[0];
+        var ipEndPoint = new IPEndPoint(ipAddress, 11000);
 
-        Console.WriteLine("Num = {0}", _num);
+        var listenSocket = new Socket(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        listenSocket.Bind(ipEndPoint);
+        listenSocket.Listen(10);
+
+        while (true)
+        {
+            Console.WriteLine("Listening...");
+
+            var clientSocket = listenSocket.Accept();
+
+            try
+            {
+                var recvBuffer = new byte[1024];
+                var recvBytes = clientSocket.Receive(recvBuffer);
+                var recvString = Encoding.UTF8.GetString(recvBuffer, 0, recvBytes);
+
+                Console.WriteLine($"[From Client] : {recvString}");
+
+                var sendBuffer =
+                    Encoding.UTF8.GetBytes($"Welcome to Kauri Server! You send to me this message :{recvString}");
+
+                clientSocket.Send(sendBuffer);
+
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }
