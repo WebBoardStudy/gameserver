@@ -7,6 +7,8 @@ namespace ServerCore;
 
 internal class Program
 {
+    private static Listener _listener = new();
+
     private static void Main(string[] args)
     {
         var host = Dns.GetHostName();
@@ -14,15 +16,13 @@ internal class Program
         var ipAddress = hostEntry.AddressList[0];
         var ipEndPoint = new IPEndPoint(ipAddress, 11000);
 
-        var listenSocket = new Socket(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        listenSocket.Bind(ipEndPoint);
-        listenSocket.Listen(10);
+        _listener.Init(ipEndPoint);
 
         while (true)
         {
             Console.WriteLine("Listening...");
 
-            var clientSocket = listenSocket.Accept();
+            var clientSocket = _listener.Accept();
 
             try
             {
