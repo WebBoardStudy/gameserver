@@ -13,30 +13,36 @@ internal class Program
         var ipHostEntry = Dns.GetHostEntry(hostName);
         var remoteEp = new IPEndPoint(ipHostEntry.AddressList[0], 11000);
 
-        var socket = new Socket(remoteEp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-        try
+        for (int count = 0; count < 1000; count++)
         {
-            socket.Connect(remoteEp);
+            var socket = new Socket(remoteEp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-            Console.WriteLine($"Connect to {remoteEp.ToString()}");
+            try
+            {
+                socket.Connect(remoteEp);
 
-            var sendBuffer = Encoding.UTF8.GetBytes("hello! 안녕! 반가워~");
-            var sendBytes = socket.Send(sendBuffer);
+                Console.WriteLine($"Client:{count} Connect to {remoteEp.ToString()}");
 
-            var recvBuffer = new byte[1024];
-            var recvBytes = socket.Receive(recvBuffer);
+                var sendBuffer = Encoding.UTF8.GetBytes("hello! 안녕! 반가워~");
+                var sendBytes = socket.Send(sendBuffer);
 
-            var recvString = Encoding.UTF8.GetString(recvBuffer, 0, recvBytes);
-            Console.WriteLine($"[From Server] : {recvString}");
+                var recvBuffer = new byte[1024];
+                var recvBytes = socket.Receive(recvBuffer);
 
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+                var recvString = Encoding.UTF8.GetString(recvBuffer, 0, recvBytes);
+                Console.WriteLine($"[From Server] : {recvString}");
+
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+            Thread.Sleep(100);
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+       
     }
 }
