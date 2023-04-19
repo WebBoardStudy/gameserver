@@ -13,7 +13,7 @@ internal class Program
         var ipHostEntry = Dns.GetHostEntry(hostName);
         var remoteEp = new IPEndPoint(ipHostEntry.AddressList[0], 11000);
 
-        for (int count = 0; count < 1000; count++)
+        for (var count = 0; count < 1000; count++)
         {
             var socket = new Socket(remoteEp.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
@@ -23,8 +23,11 @@ internal class Program
 
                 Console.WriteLine($"Client:{count} Connect to {remoteEp.ToString()}");
 
-                var sendBuffer = Encoding.UTF8.GetBytes("hello! 안녕! 반가워~");
-                var sendBytes = socket.Send(sendBuffer);
+                for (var i = 0; i < 5; i++)
+                {
+                    var sendBuffer = Encoding.UTF8.GetBytes($"hello! 안녕! 반가워~ {i}");
+                    var sendBytes = socket.Send(sendBuffer);
+                }
 
                 var recvBuffer = new byte[1024];
                 var recvBytes = socket.Receive(recvBuffer);
@@ -40,9 +43,8 @@ internal class Program
                 Console.WriteLine(e);
                 throw;
             }
-            
+
             Thread.Sleep(100);
         }
-       
     }
 }

@@ -7,7 +7,7 @@ public class Listener
 {
     private Socket? _listenSocket;
     private Action<Socket>? _acceptHandler;
-    
+
     public void Init(IPEndPoint ipEndPoint, Action<Socket>? acceptHandler)
     {
         _listenSocket = new Socket(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);

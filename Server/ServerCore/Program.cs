@@ -13,19 +13,17 @@ internal class Program
     {
         try
         {
-            var recvBuffer = new byte[1024];
-            var recvBytes = clientSocket.Receive(recvBuffer);
-            var recvString = Encoding.UTF8.GetString(recvBuffer, 0, recvBytes);
-
-            Console.WriteLine($"[From Client] : {recvString}");
+            var session = new Session();
+            session.Start(clientSocket);
 
             var sendBuffer =
-                Encoding.UTF8.GetBytes($"Welcome to Kauri Server! You send to me this message :{recvString}");
+                Encoding.UTF8.GetBytes($"Welcome to Kauri Server");
+            session.Send(sendBuffer);
 
-            clientSocket.Send(sendBuffer);
+            Thread.Sleep(1000);
 
-            clientSocket.Shutdown(SocketShutdown.Both);
-            clientSocket.Close();
+            session.Disconnect();
+            session.Disconnect();
         }
         catch (Exception e)
         {
