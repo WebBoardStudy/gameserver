@@ -4,56 +4,94 @@ using System.Text;
 
 namespace ServerCore;
 
-public class Session
-{
+public class Session {
     private Socket _socket;
     private int _disconnected = 0;
+    private SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+    private Queue<byte[]> _sendQueue = new Queue<byte[]>();
+    private bool _sendPending = false;
+    private object _sendLock = new object();
 
-    public void Start(Socket socket)
-    {
+    public void Start(Socket socket) {
         _socket = socket;
         var recvArgs = new SocketAsyncEventArgs();
         recvArgs.Completed += OnRecvCompleted;
         recvArgs.SetBuffer(new byte[1024], 0, 1024);
         RegisterRecv(recvArgs);
+
+        _sendArgs.Completed += OnSendCompleted;
     }
 
-    public void Send(byte[] sendBuffer)
-    {
-        _socket.Send(sendBuffer);
-    }
-
-    private void OnRecvCompleted(object? sender, SocketAsyncEventArgs args)
-    {
-        if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
-        {
-            try
-            {
+    private void OnRecvCompleted(object? sender, SocketAsyncEventArgs args) {
+        if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success) {
+            try {
                 Debug.Assert(args.Buffer != null, "args.Buffer != null");
                 var recvData = Encoding.UTF8.GetString(args.Buffer, args.Offset, args.BytesTransferred);
                 Console.WriteLine($"[From Client] : {recvData}");
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine($"OnRecvCompleted failed {e}");
             }
         }
-        else
-        {
-            // disconnect
+        else {
+            Disconnect();
         }
     }
 
-    private void RegisterRecv(SocketAsyncEventArgs args)
-    {
+    private void RegisterRecv(SocketAsyncEventArgs args) {
         var pending = _socket.ReceiveAsync(args);
         if (pending == false) OnRecvCompleted(null, args);
     }
 
-    public void Disconnect()
-    {
+    public void Disconnect() {
         if (Interlocked.Exchange(ref _disconnected, 1) == 1) return;
         _socket.Shutdown(SocketShutdown.Both);
         _socket.Close();
     }
+
+    public void Send(byte[] sendBuffer) {
+
+        lock (_sendLock) {
+            _sendQueue.Enqueue(sendBuffer);
+            if (_sendPending == false) {
+                RegisterSend();
+            }
+        }
+    }
+
+    private void RegisterSend() {
+        _sendPending = true;
+
+        byte[] sendBuffer = _sendQueue.Dequeue();
+        _sendArgs.SetBuffer(sendBuffer, 0, sendBuffer.Length);
+        bool pending = _socket.SendAsync(_sendArgs);
+        if (pending == false) {
+            OnSendCompleted(null, _sendArgs);
+        }
+    }
+
+    private void OnSendCompleted(object? value, SocketAsyncEventArgs args) {
+        lock (_sendLock) {
+            if (args.SocketError == SocketError.Success && args.BytesTransferred > 0) {
+                try {
+                    if (_sendQueue.Count > 0) {
+                        RegisterSend();
+                    }
+                    else {
+                        _sendPending = false;
+                    }
+
+                }
+                catch (Exception ex) {
+                    Console.WriteLine($"OnSendCompleted failed {ex}");
+                }
+
+            }
+            else {
+                Disconnect();
+            }
+        }
+    }
+
+
 }
