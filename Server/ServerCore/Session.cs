@@ -15,7 +15,7 @@ public abstract class Session
     private SocketAsyncEventArgs _recvArgs = new();
     private SocketAsyncEventArgs _sendArgs = new();
 
-    public abstract void OnConnected(EndPoint endPoint);
+    public abstract void OnConnected(EndPoint? endPoint);
     public abstract void OnRecv(ArraySegment<byte> buffer);
     public abstract void OnSend(int numOfBytes);
     public abstract void OnDisconnected(EndPoint? endPoint);

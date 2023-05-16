@@ -11,7 +11,7 @@ internal class Program
 {
     private class GameSession : Session
     {
-        public override void OnConnected(EndPoint endPoint)
+        public override void OnConnected(EndPoint? endPoint)
         {
             try
             {
@@ -60,7 +60,7 @@ internal class Program
 
         public override void OnSend(int numOfBytes)
         {
-            Console.WriteLine($"Transfered bytes: {numOfBytes}");
+            Console.WriteLine($"Send To Client, Transfered bytes: {numOfBytes}");
         }
     }
 

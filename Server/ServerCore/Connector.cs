@@ -40,5 +40,6 @@ public class Connector
 
         Debug.Assert(args.ConnectSocket != null, "args.ConnectSocket != null");
         session?.Start(args.ConnectSocket);
+        session?.OnConnected(args.RemoteEndPoint);
     }
 }

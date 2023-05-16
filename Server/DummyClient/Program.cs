@@ -11,8 +11,7 @@ internal class Program
 {
     private class GameSession : Session
     {
-        public override void OnConnected(EndPoint endPoint)
-        {
+        public override void OnConnected(EndPoint? endPoint) {
             try
             {
                 Console.WriteLine($"OnConnected : {endPoint}");
@@ -57,7 +56,7 @@ internal class Program
 
         public override void OnSend(int numOfBytes)
         {
-            Console.WriteLine($"Transfered bytes: {numOfBytes}");
+            Console.WriteLine($"Send To Server! Transfered bytes: {numOfBytes}");
         }
     }
 
@@ -67,15 +66,18 @@ internal class Program
         var ipHostEntry = Dns.GetHostEntry(hostName);
         var remoteEp = new IPEndPoint(ipHostEntry.AddressList[0], 11000);
 
-        try
-        {
+        try {
             var connector = new Connector();
             connector.Connect(remoteEp, () => new GameSession());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Console.WriteLine(e);
             throw;
         }
+
+        while (true) {
+           
+        }
+        
     }
 }
