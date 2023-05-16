@@ -44,17 +44,19 @@ internal class Program
             }
         }
 
-        public override void OnRecv(ArraySegment<byte> buffer)
+        public override int OnRecv(ArraySegment<byte> buffer)
         {
             try
             {
                 Debug.Assert(buffer.Array != null, "buffer.Array != null");
                 var recvStr = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
                 Console.WriteLine($"[From Client] {recvStr}");
+                return buffer.Count;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"OnRecv failed : {ex}");
+                return 0;
             }
         }
 
