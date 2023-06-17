@@ -5,6 +5,33 @@ using System.Text;
 
 namespace ServerCore;
 
+public abstract class PacketSession : Session {
+    public static readonly int HeaderSize = sizeof(ushort);
+
+    public sealed override int OnRecv(ArraySegment<byte> buffer) {
+        int processLen = 0;
+        while (true) {
+            // 최소 헤더 파싱 여부
+            if (buffer.Count < HeaderSize) {
+                break;
+            }
+
+            ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+            if (dataSize > buffer.Count)
+                break;
+
+            OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
+
+            processLen += dataSize;
+            buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+        }
+        return processLen;
+    }
+
+    public abstract void OnRecvPacket(ArraySegment<byte> buffer);
+
+}
+
 public abstract class Session
 {
     private Socket _socket;

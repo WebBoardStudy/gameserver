@@ -9,6 +9,12 @@ namespace DummyClient;
 
 internal class Program
 {
+    class Packet {
+        public ushort size;
+        public ushort packetId;
+    }
+
+
     private class GameSession : Session
     {
         public override void OnConnected(EndPoint endPoint) {
@@ -16,10 +22,19 @@ internal class Program
             {
                 Console.WriteLine($"OnConnected : {endPoint}");
 
+
+                Packet packet = new Packet() { size = 4, packetId = 10 };
+
                 for (var i = 0; i < 5; i++)
                 {
-                    var sendBuffer = Encoding.UTF8.GetBytes($"hello! 안녕! 반가워~ {i}");
-                    Send(sendBuffer);
+                    ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+                    byte[] buf = BitConverter.GetBytes(packet.size);
+                    byte[] buf2 = BitConverter.GetBytes(packet.packetId);
+                    Array.Copy(buf, 0, openSegment.Array, openSegment.Offset, buf.Length);
+                    Array.Copy(buf2, 0, openSegment.Array, openSegment.Offset + buf.Length, buf2.Length);
+                    ArraySegment<byte> sendBuff = SendBufferHelper.Close(packet.size);
+
+                    Send(sendBuff);
                 }
             }
             catch (Exception ex)
