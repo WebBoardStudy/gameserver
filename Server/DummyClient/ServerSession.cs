@@ -21,13 +21,17 @@ namespace DummyClient {
         }
 
         public override void Read(ArraySegment<byte> s) {
+            if (s == null) {
+                return;
+            }
+
             ushort count = 0;
             //ushort size = BitConverter.ToUInt16(s.Array, s.Offset);
             count += 2;
             //ushort packetId = BitConverter.ToUInt16(s.Array, s.Offset + count);
             count += 2;
 
-            this.playerId = BitConverter.ToInt64(s.Array, s.Offset + count);
+            this.playerId = BitConverter.ToInt64(new ReadOnlySpan<byte>(s.Array, s.Offset + count, s.Count - count));
             count += 8;
         }
         public override ArraySegment<byte> Write() {
@@ -44,7 +48,7 @@ namespace DummyClient {
             count += 8;
 
             // write packet size
-            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), count);
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), (ushort)4);
 
             if (!success) {
                 return null;
