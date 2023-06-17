@@ -4,12 +4,10 @@ using System.Net.Sockets;
 
 namespace ServerCore;
 
-public class Connector
-{
+public class Connector {
     private Func<Session> _sessionFactory;
 
-    public void Connect(IPEndPoint remoteEndPoint, Func<Session> sessionFactory)
-    {
+    public void Connect(IPEndPoint remoteEndPoint, Func<Session> sessionFactory) {
         var socket = new Socket(remoteEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         _sessionFactory = sessionFactory;
         var args = new SocketAsyncEventArgs();
@@ -19,8 +17,7 @@ public class Connector
         RegisterConnect(args);
     }
 
-    private void RegisterConnect(SocketAsyncEventArgs args)
-    {
+    private void RegisterConnect(SocketAsyncEventArgs args) {
         var socket = args.UserToken as Socket;
         if (socket == null) return;
 
@@ -28,10 +25,8 @@ public class Connector
         if (pending == false) OnConnectCompleted(null, args);
     }
 
-    private void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
-    {
-        if (args.SocketError != SocketError.Success)
-        {
+    private void OnConnectCompleted(object sender, SocketAsyncEventArgs args) {
+        if (args.SocketError != SocketError.Success) {
             Console.WriteLine($"onConnect Complete Failed! {args.SocketError}");
             return;
         }

@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace ServerCore;
 
@@ -32,8 +31,7 @@ public abstract class PacketSession : Session {
 
 }
 
-public abstract class Session
-{
+public abstract class Session {
     private Socket _socket;
     private int _disconnected = 0;
     RecvBuffer _recvBuffer = new RecvBuffer(1024);
@@ -48,8 +46,7 @@ public abstract class Session
     public abstract void OnSend(int numOfBytes);
     public abstract void OnDisconnected(EndPoint endPoint);
 
-    public void Start(Socket socket)
-    {
+    public void Start(Socket socket) {
         _socket = socket;
 
         _recvArgs.Completed += OnRecvCompleted;
@@ -58,16 +55,14 @@ public abstract class Session
         RegisterRecv();
     }
 
-    public void Disconnect()
-    {
+    public void Disconnect() {
         if (Interlocked.Exchange(ref _disconnected, 1) == 1) return;
         OnDisconnected(_socket?.RemoteEndPoint);
         _socket?.Shutdown(SocketShutdown.Both);
         _socket?.Close();
     }
 
-    private void RegisterRecv()
-    {
+    private void RegisterRecv() {
         _recvBuffer.Clean();
         var segment = _recvBuffer.WriteSegment;
         _recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
@@ -76,11 +71,9 @@ public abstract class Session
     }
 
 
-    private void OnRecvCompleted(object sender, SocketAsyncEventArgs args)
-    {
+    private void OnRecvCompleted(object sender, SocketAsyncEventArgs args) {
         if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
-            try
-            {
+            try {
                 // Write 커서 이동
                 if (_recvBuffer.OnWrite(args.BytesTransferred) == false) {
                     Disconnect();
@@ -101,8 +94,7 @@ public abstract class Session
 
                 RegisterRecv();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine($"OnRecvCompleted failed {e}");
             }
         else
@@ -110,19 +102,15 @@ public abstract class Session
     }
 
 
-    public void Send(ArraySegment<byte> sendBuffer)
-    {
-        lock (_sendLock)
-        {
+    public void Send(ArraySegment<byte> sendBuffer) {
+        lock (_sendLock) {
             _sendQueue.Enqueue(sendBuffer);
             if (_pendingList.Count == 0) RegisterSend();
         }
     }
 
-    private void RegisterSend()
-    {
-        while (_sendQueue.Count > 0)
-        {
+    private void RegisterSend() {
+        while (_sendQueue.Count > 0) {
             var sendBuffer = _sendQueue.Dequeue();
             _pendingList.Add(sendBuffer);
         }
@@ -133,13 +121,10 @@ public abstract class Session
         if (pending == false) OnSendCompleted(null, _sendArgs);
     }
 
-    private void OnSendCompleted(object value, SocketAsyncEventArgs args)
-    {
-        lock (_sendLock)
-        {
+    private void OnSendCompleted(object value, SocketAsyncEventArgs args) {
+        lock (_sendLock) {
             if (args.SocketError == SocketError.Success && args.BytesTransferred > 0)
-                try
-                {
+                try {
                     _sendArgs.BufferList = null;
                     _pendingList.Clear();
 
@@ -147,8 +132,7 @@ public abstract class Session
 
                     if (_sendQueue.Count > 0) RegisterSend();
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     Console.WriteLine($"OnSendCompleted failed {ex}");
                 }
             else

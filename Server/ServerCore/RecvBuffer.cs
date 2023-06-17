@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace ServerCore {
     internal class RecvBuffer {
@@ -15,9 +10,9 @@ namespace ServerCore {
             _buffer = new ArraySegment<byte>(new byte[bufferSize], 0, bufferSize);
         }
 
-        public int DataSize { get {  return _writePos - _readPos; } }
+        public int DataSize { get { return _writePos - _readPos; } }
         public int FreeSize { get { return _buffer.Count - _writePos; } }
-        public ArraySegment<byte> ReadSegment {            
+        public ArraySegment<byte> ReadSegment {
             get {
                 Debug.Assert(_buffer.Array != null, "_buffer.Array != null");
                 return new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _readPos, DataSize);
@@ -37,7 +32,8 @@ namespace ServerCore {
                 // 남은 데이터가 없으면 
                 _readPos = 0;
                 _writePos = 0;
-            } else {
+            }
+            else {
                 Debug.Assert(_buffer.Array != null, "_buffer.Array != null");
                 Array.Copy(_buffer.Array, _buffer.Offset + _readPos, _buffer.Array, _buffer.Offset, dataSize);
                 _readPos = 0;
@@ -56,7 +52,7 @@ namespace ServerCore {
 
         public bool OnWrite(int numOfBytes) {
             if (numOfBytes > FreeSize) {
-                return false;   
+                return false;
             }
             _writePos += numOfBytes;
             return true;

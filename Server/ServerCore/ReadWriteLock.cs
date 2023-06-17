@@ -1,7 +1,6 @@
 ﻿namespace ServerCore;
 
-public class ReadWriteLock
-{
+public class ReadWriteLock {
     private const int EMPTY_FLAG = 0x00000000;
 
     private const int WRITE_MASK = 0x7FFF0000;
@@ -15,21 +14,17 @@ public class ReadWriteLock
 
     private int _writeCount = 0;
 
-    public void WriteLock()
-    {
+    public void WriteLock() {
         var threadId = (_flag & WRITE_MASK) >> 16;
-        if (Thread.CurrentThread.ManagedThreadId == threadId)
-        {
+        if (Thread.CurrentThread.ManagedThreadId == threadId) {
             _writeCount++;
             return;
         }
 
         var desired = (Thread.CurrentThread.ManagedThreadId << 16) & WRITE_MASK;
-        while (true)
-        {
+        while (true) {
             for (var i = 0; i < MAX_SPIN_COUNT; i++)
-                if (Interlocked.CompareExchange(ref _flag, desired, EMPTY_FLAG) == EMPTY_FLAG)
-                {
+                if (Interlocked.CompareExchange(ref _flag, desired, EMPTY_FLAG) == EMPTY_FLAG) {
                     _writeCount = 1;
                     return;
                 }
@@ -38,28 +33,22 @@ public class ReadWriteLock
         }
     }
 
-    public void WriteUnlock()
-    {
+    public void WriteUnlock() {
         var lockCount = --_writeCount;
         if (lockCount == 0) Interlocked.Exchange(ref _flag, EMPTY_FLAG);
     }
 
-    public void ReadLock()
-    {
+    public void ReadLock() {
         var threadId = (_flag & WRITE_MASK) >> 16;
-        if (Thread.CurrentThread.ManagedThreadId == threadId)
-        {
+        if (Thread.CurrentThread.ManagedThreadId == threadId) {
             Interlocked.Increment(ref _flag);
             return;
         }
 
-        while (true)
-        {
-            for (var i = 0; i < MAX_SPIN_COUNT; i++)
-            {
+        while (true) {
+            for (var i = 0; i < MAX_SPIN_COUNT; i++) {
                 var expected = _flag & READ_MASK;
-                if (Interlocked.CompareExchange(ref _flag, expected + 1, expected) == expected)
-                {
+                if (Interlocked.CompareExchange(ref _flag, expected + 1, expected) == expected) {
                     _flag++;
                     return;
                 }
@@ -69,8 +58,7 @@ public class ReadWriteLock
         }
     }
 
-    public void ReadUnlock()
-    {
+    public void ReadUnlock() {
         Interlocked.Decrement(ref _flag);
     }
 }

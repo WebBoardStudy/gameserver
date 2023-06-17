@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServerCore {
+﻿namespace ServerCore {
     public class SendBufferHelper {
         public static ThreadLocal<SendBuffer> CurrentBuffer = new ThreadLocal<SendBuffer>(() => { return null; });
 
@@ -31,7 +25,7 @@ namespace ServerCore {
         int _usedSize = 0;
 
         public SendBuffer(int chunkSize) {
-             _buffer = new byte[chunkSize];
+            _buffer = new byte[chunkSize];
         }
 
         public int FreeSize { get { return _buffer.Length - _usedSize; } }
