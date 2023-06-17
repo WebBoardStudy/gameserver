@@ -7,21 +7,21 @@ namespace ServerCore;
 
 public abstract class Session
 {
-    private Socket? _socket;
+    private Socket _socket;
     private int _disconnected = 0;
     RecvBuffer _recvBuffer = new RecvBuffer(1024);
-    private Queue<byte[]> _sendQueue = new();
+    private Queue<ArraySegment<byte>> _sendQueue = new();
     private object _sendLock = new();
     private List<ArraySegment<byte>> _pendingList = new();
     private SocketAsyncEventArgs _recvArgs = new();
     private SocketAsyncEventArgs _sendArgs = new();
 
-    public abstract void OnConnected(EndPoint? endPoint);
+    public abstract void OnConnected(EndPoint endPoint);
     public abstract int OnRecv(ArraySegment<byte> buffer);
     public abstract void OnSend(int numOfBytes);
-    public abstract void OnDisconnected(EndPoint? endPoint);
+    public abstract void OnDisconnected(EndPoint endPoint);
 
-    public void Start(Socket? socket)
+    public void Start(Socket socket)
     {
         _socket = socket;
 
@@ -49,7 +49,7 @@ public abstract class Session
     }
 
 
-    private void OnRecvCompleted(object? sender, SocketAsyncEventArgs args)
+    private void OnRecvCompleted(object sender, SocketAsyncEventArgs args)
     {
         if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
             try
@@ -83,7 +83,7 @@ public abstract class Session
     }
 
 
-    public void Send(byte[] sendBuffer)
+    public void Send(ArraySegment<byte> sendBuffer)
     {
         lock (_sendLock)
         {
@@ -106,7 +106,7 @@ public abstract class Session
         if (pending == false) OnSendCompleted(null, _sendArgs);
     }
 
-    private void OnSendCompleted(object? value, SocketAsyncEventArgs args)
+    private void OnSendCompleted(object value, SocketAsyncEventArgs args)
     {
         lock (_sendLock)
         {

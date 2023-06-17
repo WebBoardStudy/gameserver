@@ -6,9 +6,9 @@ namespace ServerCore;
 
 public class Connector
 {
-    private Func<Session>? _sessionFactory;
+    private Func<Session> _sessionFactory;
 
-    public void Connect(IPEndPoint remoteEndPoint, Func<Session>? sessionFactory)
+    public void Connect(IPEndPoint remoteEndPoint, Func<Session> sessionFactory)
     {
         var socket = new Socket(remoteEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         _sessionFactory = sessionFactory;
@@ -28,7 +28,7 @@ public class Connector
         if (pending == false) OnConnectCompleted(null, args);
     }
 
-    private void OnConnectCompleted(object? sender, SocketAsyncEventArgs args)
+    private void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
     {
         if (args.SocketError != SocketError.Success)
         {

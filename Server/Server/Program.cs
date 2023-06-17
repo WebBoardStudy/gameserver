@@ -9,18 +9,31 @@ namespace Server;
 
 internal class Program
 {
+    class Knight {
+        public int hp;
+        public int attack;
+        public string name;
+        public List<int> skills = new List<int>();
+    }
+
     private class GameSession : Session
     {
-        public override void OnConnected(EndPoint? endPoint)
+        public override void OnConnected(EndPoint endPoint)
         {
-            try
-            {
+            try {
                 Console.WriteLine($"OnConnected : {endPoint}");
 
 
-                var sendBuffer =
-                    Encoding.UTF8.GetBytes($"Welcome to Kauri Server");
-                Send(sendBuffer);
+                Knight knight = new Knight() { hp = 100, attack = 10 };
+
+                ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+                byte[] buf = BitConverter.GetBytes(knight.hp);
+                byte[] buf2 = BitConverter.GetBytes(knight.attack);
+                Array.Copy(buf, 0, openSegment.Array, openSegment.Offset, buf.Length);
+                Array.Copy(buf2, 0, openSegment.Array, openSegment.Offset + buf.Length, buf2.Length);
+                ArraySegment<byte> sendBuff = SendBufferHelper.Close(buf.Length + buf2.Length);
+                
+                Send(sendBuff);
 
                 Thread.Sleep(1000);
 
@@ -32,7 +45,7 @@ internal class Program
             }
         }
 
-        public override void OnDisconnected(EndPoint? endPoint)
+        public override void OnDisconnected(EndPoint endPoint)
         {
             try
             {

@@ -3,11 +3,11 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="Program.cs"/>
+        <Compile Remove="Program.cs" />
     </ItemGroup>
 
 </Project>

@@ -5,8 +5,8 @@ namespace ServerCore;
 
 public class Listener
 {
-    private Socket? _listenSocket;
-    private Func<Session>? _sessionFactory;
+    private Socket _listenSocket;
+    private Func<Session> _sessionFactory;
 
     public void Init(IPEndPoint ipEndPoint, Func<Session> factoryFunc)
     {
@@ -29,7 +29,7 @@ public class Listener
         if (pending == false) OnAcceptCompleted(null, args);
     }
 
-    private void OnAcceptCompleted(object? sender, SocketAsyncEventArgs args)
+    private void OnAcceptCompleted(object sender, SocketAsyncEventArgs args)
     {
         if (args.SocketError == SocketError.Success)
             try

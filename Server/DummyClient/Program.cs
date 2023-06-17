@@ -11,7 +11,7 @@ internal class Program
 {
     private class GameSession : Session
     {
-        public override void OnConnected(EndPoint? endPoint) {
+        public override void OnConnected(EndPoint endPoint) {
             try
             {
                 Console.WriteLine($"OnConnected : {endPoint}");
@@ -28,7 +28,7 @@ internal class Program
             }
         }
 
-        public override void OnDisconnected(EndPoint? endPoint)
+        public override void OnDisconnected(EndPoint endPoint)
         {
             try
             {
