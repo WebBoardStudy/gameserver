@@ -7,13 +7,35 @@ using System.Threading.Tasks;
 namespace PacketGenerator {
     internal class PacketFormat {
 
+        // {0} 패킷 이름/번호 목록
+        // {1} 패킷 목록
+        public static string FileFormat =
+@"using ServerCore;
+using System;
+using System.Diagnostics;
+using System.Net;
+using System.Text;
+using System.Collections.Generic;
+
+public enum PacketID {{
+    {0}
+}}
+{1}
+";
+        // {0} 패킷 이름 
+        // {1} 패킷 번호
+        public static string packetEnumFormat = 
+@"{0} = {1},";
+
         // {0} 패킷 이름
         // {1} 멤버 변수
         // {2} 멤버 변수 read
         // {3} 멤버 변수 write
         public static string packetFormat =
-@"public class {0} {{
-    {1}        
+@"
+public class {0} {{
+    {1} 
+
     public void Read(ArraySegment<byte> segment) {{
         if (segment == null) {{
             return;
@@ -45,7 +67,8 @@ namespace PacketGenerator {
         }}
         return SendBufferHelper.Close(count);
     }}
-}}";
+}}
+";
         // {0} 변수 형식
         // {1} 변수 이름
         public static string memberFormat =
@@ -103,6 +126,12 @@ for (ushort i = 0; i < {1}Len; i++) {{
 }}";
 
         // {0} 변수 이름
+        // {1} 변수 타입
+        public static string readByteFormat =
+@"this.{0} = ({1})segment.Array[segment.Offset + count];
+count += sizeof({1});";
+
+        // {0} 변수 이름
         // {1} 변수 형식
         public static string writeFormat =
 @"success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.{0});
@@ -124,5 +153,11 @@ count += sizeof(ushort);
 foreach ({0} {1} in this.{1}s) {{
     success &= {1}.Write(s, ref count);
 }}";
-    }
+
+        // {0} 멤버 이름
+        // {1} 멤버 타입
+        public static string writeByteFormat =
+@"segment.Array[segment.Offset + count] = (byte)this.{0};
+count += sizeof({1});";
+    }    
 }

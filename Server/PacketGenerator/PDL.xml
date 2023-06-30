@@ -9,4 +9,10 @@
       <float name="duration"/>
     </list>
   </packet>
+  <packet name="Test">
+    <long name="testId"/>
+    <string name="name"/>
+    <float name="testFloat"/>
+    <byte name="testByte"/>
+  </packet>
 </PDL>

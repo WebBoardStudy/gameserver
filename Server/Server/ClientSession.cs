@@ -132,12 +132,12 @@ namespace Server {
             ushort packetId = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
             count += 2;
 
-            switch((PacketID)packetId) {
-                case PacketID.PlayerInfoReq: {                        
+            switch ((PacketID)packetId) {
+                case PacketID.PlayerInfoReq: {
                         PlayerInfoReq packet = new PlayerInfoReq();
                         packet.Read(buffer);
                         Console.WriteLine($"PlayerInfoReq: playerId:{packet.playerId} name:{packet.name}");
-                        foreach(var skill in packet.skills) {
+                        foreach (var skill in packet.skills) {
                             Console.WriteLine($"\tSkill({skill.id} {skill.level} {skill.duration})");
                         }
                     }

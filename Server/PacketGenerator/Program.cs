@@ -5,6 +5,8 @@ using System.Xml;
 namespace PacketGenerator {
     class Program {
         static string genPackets;
+        static ushort packetId = 0;
+        static string packetEnums;
         static void Main(string[] args) {
             XmlReaderSettings settings = new XmlReaderSettings() {
                 IgnoreWhitespace = true,
@@ -19,7 +21,7 @@ namespace PacketGenerator {
                     }
                 }
 
-                File.WriteAllText("GenPacket.cs", genPackets);
+                File.WriteAllText("GenPacket.cs", string.Format(PacketFormat.FileFormat, packetEnums, genPackets));
             }
         }
 
@@ -41,7 +43,7 @@ namespace PacketGenerator {
 
             Tuple<string, string, string> t = ParseMembers(r);
             genPackets += string.Format(PacketFormat.packetFormat, packetName, t.Item1, t.Item2, t.Item3);
-
+            packetEnums += string.Format(PacketFormat.packetEnumFormat, packetName, ++packetId) + Environment.NewLine + "\t";
         }
 
         private static Tuple<string, string, string> ParseMembers(XmlReader r) {
@@ -73,8 +75,13 @@ namespace PacketGenerator {
 
                 string memberType = r.Name.ToLower();
                 switch (memberType) {
-                    case "bool":
                     case "byte":
+                    case "sbyte":
+                        memberCode += string.Format(PacketFormat.memberFormat, memberType, memberName);
+                        readCode += string.Format(PacketFormat.readByteFormat, memberName, memberType);
+                        writeCode += string.Format(PacketFormat.writeByteFormat, memberName, memberType);
+                        break;
+                    case "bool":
                     case "short":
                     case "ushort":
                     case "int":

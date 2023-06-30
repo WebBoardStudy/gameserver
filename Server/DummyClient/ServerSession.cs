@@ -3,13 +3,13 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
-using static DummyClient.PlayerInfoReq;
 
 namespace DummyClient {
 
     public class PlayerInfoReq {
         public long playerId;
         public string name;
+        public byte testByte;
 
         public struct Skill {
             public int id;
@@ -48,6 +48,9 @@ namespace DummyClient {
             count += sizeof(ushort);
             count += sizeof(ushort);
 
+            this.testByte = segment.Array[segment.Offset + count];
+            count += sizeof(byte);
+
             this.playerId = BitConverter.ToInt64(s.Slice(count, s.Length - count));
             count += sizeof(long);
             ushort nameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
@@ -76,6 +79,10 @@ namespace DummyClient {
             count += sizeof(ushort);
             success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.PlayerInfoReq);
             count += sizeof(ushort);
+
+            segment.Array[segment.Offset + count] = this.testByte;
+            count += sizeof(byte);
+
             success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
             count += sizeof(long);
             ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
