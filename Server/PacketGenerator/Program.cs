@@ -8,12 +8,17 @@ namespace PacketGenerator {
         static ushort packetId = 0;
         static string packetEnums;
         static void Main(string[] args) {
+            string filePath = "../PDL.xml";
+            if (args.Length >= 1) {
+                filePath = args[0];
+            }
+
             XmlReaderSettings settings = new XmlReaderSettings() {
                 IgnoreWhitespace = true,
                 IgnoreComments = true
             };
 
-            using (XmlReader r = XmlReader.Create("PDL.xml", settings)) {
+            using (XmlReader r = XmlReader.Create(filePath, settings)) {
                 r.MoveToContent();
                 while (r.Read()) {
                     if (r.Depth == 1 && r.NodeType == XmlNodeType.Element) {
