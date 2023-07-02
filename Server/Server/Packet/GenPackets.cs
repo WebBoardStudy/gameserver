@@ -6,12 +6,19 @@ using System.Text;
 using System.Collections.Generic;
 
 public enum PacketID {
-    PlayerInfoReq = 1,
-	Test = 2,
+    C_PlayerInfoReq = 1,
+	S_Test = 2,
 	
 }
 
-public class PlayerInfoReq {
+public interface IPacket {
+	ushort Protocol { get; }
+	void Read(ArraySegment<byte> segment);
+	ArraySegment<byte> Write();
+}
+
+
+public class C_PlayerInfoReq : IPacket {
     public long playerId;
 	public string name;
 	
@@ -43,6 +50,8 @@ public class PlayerInfoReq {
 	
 	public List<Skill> skills = new List<Skill>();
 	 
+
+    public ushort Protocol { get { return (ushort)PacketID.C_PlayerInfoReq; } }
 
     public void Read(ArraySegment<byte> segment) {
         if (segment == null) {
@@ -79,7 +88,7 @@ public class PlayerInfoReq {
         Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.PlayerInfoReq);
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.C_PlayerInfoReq);
         count += sizeof(ushort);
         success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.playerId);
 		count += sizeof(long);
@@ -102,11 +111,13 @@ public class PlayerInfoReq {
     }
 }
 
-public class Test {
+public class S_Test : IPacket {
     public long testId;
 	public string name;
 	public float testFloat;
 	public byte testByte; 
+
+    public ushort Protocol { get { return (ushort)PacketID.S_Test; } }
 
     public void Read(ArraySegment<byte> segment) {
         if (segment == null) {
@@ -138,7 +149,7 @@ public class Test {
         Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
         count += sizeof(ushort);
-        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.Test);
+        success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketID.S_Test);
         count += sizeof(ushort);
         success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.testId);
 		count += sizeof(long);

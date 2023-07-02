@@ -8,6 +8,8 @@ internal class Program {
     private static Listener _listener = new();
 
     private static void Main(string[] args) {
+        PacketManager.Instance.Register();
+
         var host = Dns.GetHostName();
         var hostEntry = Dns.GetHostEntry(host);
         var ipAddress = hostEntry.AddressList[0];

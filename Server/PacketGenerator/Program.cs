@@ -7,6 +7,10 @@ namespace PacketGenerator {
         static string genPackets;
         static ushort packetId = 0;
         static string packetEnums;
+        
+        static string clientRegister;
+        static string serverRegister;
+
         static void Main(string[] args) {
             string filePath = "../PDL.xml";
             if (args.Length >= 1) {
@@ -27,6 +31,12 @@ namespace PacketGenerator {
                 }
 
                 File.WriteAllText("GenPacket.cs", string.Format(PacketFormat.FileFormat, packetEnums, genPackets));
+
+                string clientManagerText = string.Format(PacketFormat.managerFormat, clientRegister);
+                File.WriteAllText("ClientPacketManager.cs", clientManagerText);
+
+                string serverManagerText = string.Format(PacketFormat.managerFormat, serverRegister);
+                File.WriteAllText("ServerPacketManager.cs", serverManagerText);
             }
         }
 
@@ -49,6 +59,13 @@ namespace PacketGenerator {
             Tuple<string, string, string> t = ParseMembers(r);
             genPackets += string.Format(PacketFormat.packetFormat, packetName, t.Item1, t.Item2, t.Item3);
             packetEnums += string.Format(PacketFormat.packetEnumFormat, packetName, ++packetId) + Environment.NewLine + "\t";
+
+            if (packetName.StartsWith("C_") || packetName.StartsWith("c_")) {
+                serverRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
+            } else {
+                clientRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
+            }
+            
         }
 
         private static Tuple<string, string, string> ParseMembers(XmlReader r) {
