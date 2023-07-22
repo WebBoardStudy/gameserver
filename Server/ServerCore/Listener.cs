@@ -7,16 +7,18 @@ public class Listener {
     private Socket _listenSocket;
     private Func<Session> _sessionFactory;
 
-    public void Init(IPEndPoint ipEndPoint, Func<Session> factoryFunc) {
+    public void Init(IPEndPoint ipEndPoint, Func<Session> factoryFunc, int register = 10, int backlog = 100) {
         _listenSocket = new Socket(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         _listenSocket.Bind(ipEndPoint);
-        _listenSocket.Listen(10);
+        _listenSocket.Listen(backlog);
 
         _sessionFactory = factoryFunc;
 
-        var args = new SocketAsyncEventArgs();
-        args.Completed += OnAcceptCompleted;
-        RegisterAccept(args);
+        for (int i = 0; i < register; i++) {
+            var args = new SocketAsyncEventArgs();
+            args.Completed += OnAcceptCompleted;
+            RegisterAccept(args);
+        }        
     }
 
     private void RegisterAccept(SocketAsyncEventArgs args) {

@@ -14,7 +14,7 @@ namespace Server {
             try {
                 Console.WriteLine($"OnConnected : {endPoint}");
 
-                Program.gameRoom.Enter(this);
+                Program.gameRoom.Push(() => Program.gameRoom.Enter(this));
             }
             catch (Exception ex) {
                 Console.WriteLine($"OnConnected failed : {ex}");
@@ -29,7 +29,8 @@ namespace Server {
             try {
                 SessionManager.Instance.Remove(this);
                 if (Room != null ) {
-                    Room.Leave(this);
+                    GameRoom room = Room;
+                    Room.Push(() => room.Leave(this));
                     Room = null;
                 }
                 Console.WriteLine($"onDisconnect : {endPoint}");
@@ -40,7 +41,7 @@ namespace Server {
         }
 
         public override void OnSend(int numOfBytes) {
-            Console.WriteLine($"Send To Client, Transfered bytes: {numOfBytes}");
+            //Console.WriteLine($"Send To Client, Transfered bytes: {numOfBytes}");
         }
     }
 }

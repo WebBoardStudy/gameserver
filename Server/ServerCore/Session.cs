@@ -9,6 +9,7 @@ public abstract class PacketSession : Session {
 
     public sealed override int OnRecv(ArraySegment<byte> buffer) {
         int processLen = 0;
+        int packetCount = 0;
         while (true) {
             // 최소 헤더 파싱 여부
             if (buffer.Count < HeaderSize) {
@@ -20,9 +21,13 @@ public abstract class PacketSession : Session {
                 break;
 
             OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
-
+            packetCount++;
             processLen += dataSize;
             buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+        }
+
+        if (packetCount > 0) {
+            Console.WriteLine($"패킷 모아보내기 : {packetCount}");
         }
         return processLen;
     }
@@ -34,7 +39,7 @@ public abstract class PacketSession : Session {
 public abstract class Session {
     private Socket _socket;
     private int _disconnected = 0;
-    RecvBuffer _recvBuffer = new RecvBuffer(1024);
+    RecvBuffer _recvBuffer = new RecvBuffer(65535);
     private Queue<ArraySegment<byte>> _sendQueue = new();
     private object _lock = new();
     private List<ArraySegment<byte>> _pendingList = new();
@@ -121,6 +126,21 @@ public abstract class Session {
         lock (_lock) {
             _sendQueue.Enqueue(sendBuffer);
             if (_pendingList.Count == 0) RegisterSend();
+        }
+    }
+
+    public void Send(List<ArraySegment<byte>> sendBufList) {
+        if (sendBufList.Count == 0) {
+            return;
+        }
+
+        lock (_lock) {
+            foreach (var buf in sendBufList) {
+                _sendQueue.Enqueue(buf);
+            }
+
+            if (_pendingList.Count == 0)
+                RegisterSend();
         }
     }
 

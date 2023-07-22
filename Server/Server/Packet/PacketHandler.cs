@@ -14,7 +14,8 @@ public class PacketHandler {
             return;
         }
 
-        clientSession.Room.Broadcast(clientSession, pk.chat);       
+        GameRoom room = clientSession.Room;
+        clientSession.Room.Push(() => room.Broadcast(clientSession, pk.chat));
     }
 }
 

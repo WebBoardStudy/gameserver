@@ -12,7 +12,7 @@ internal class Program {
 
         try {
             var connector = new Connector();
-            connector.Connect(remoteEp, () => { return SessionManager.Instance.Generate(); }, 100);
+            connector.Connect(remoteEp, () => { return SessionManager.Instance.Generate(); }, 1000);
         }
         catch (Exception e) {
             Console.WriteLine(e);
