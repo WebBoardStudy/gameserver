@@ -7,14 +7,16 @@ namespace ServerCore;
 public class Connector {
     private Func<Session> _sessionFactory;
 
-    public void Connect(IPEndPoint remoteEndPoint, Func<Session> sessionFactory) {
-        var socket = new Socket(remoteEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        _sessionFactory = sessionFactory;
-        var args = new SocketAsyncEventArgs();
-        args.Completed += OnConnectCompleted;
-        args.RemoteEndPoint = remoteEndPoint;
-        args.UserToken = socket;
-        RegisterConnect(args);
+    public void Connect(IPEndPoint remoteEndPoint, Func<Session> sessionFactory, int count = 1) {
+        for (int i = 0; i < count; i++) {
+            var socket = new Socket(remoteEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            _sessionFactory = sessionFactory;
+            var args = new SocketAsyncEventArgs();
+            args.Completed += OnConnectCompleted;
+            args.RemoteEndPoint = remoteEndPoint;
+            args.UserToken = socket;
+            RegisterConnect(args);
+        }        
     }
 
     private void RegisterConnect(SocketAsyncEventArgs args) {

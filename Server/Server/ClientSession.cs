@@ -6,19 +6,15 @@ using System.Text;
 namespace Server {
   
     class ClientSession : PacketSession {
+        public int SessionID {  get; set; }
+        public GameRoom Room { get; set; }
+
+
         public override void OnConnected(EndPoint endPoint) {
             try {
                 Console.WriteLine($"OnConnected : {endPoint}");
-                                
-                S_Test s_Test = new S_Test();
-                s_Test.name = "테스트 서버에 잘 오셨습니다.";
-                s_Test.testFloat = 1235678.12f;
-                var sb = s_Test.Write();
-                Send(sb);
 
-                Thread.Sleep(10000);
-
-                Disconnect();
+                Program.gameRoom.Enter(this);
             }
             catch (Exception ex) {
                 Console.WriteLine($"OnConnected failed : {ex}");
@@ -31,14 +27,17 @@ namespace Server {
 
         public override void OnDisconnected(EndPoint endPoint) {
             try {
+                SessionManager.Instance.Remove(this);
+                if (Room != null ) {
+                    Room.Leave(this);
+                    Room = null;
+                }
                 Console.WriteLine($"onDisconnect : {endPoint}");
             }
             catch (Exception ex) {
                 Console.WriteLine($"OnDisconnected failed : {ex}");
             }
         }
-
-
 
         public override void OnSend(int numOfBytes) {
             Console.WriteLine($"Send To Client, Transfered bytes: {numOfBytes}");

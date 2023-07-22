@@ -3,14 +3,14 @@ using ServerCore;
 
 public class PacketManager {
     #region Singleton
-    static PacketManager _instance;
+    static PacketManager _instance = new PacketManager();
     public static PacketManager Instance {
-        get {
-            if (_instance == null) {
-                _instance = new PacketManager();
-            }
+        get {            
             return _instance;
         }
+    }
+    public PacketManager() {
+        Register();
     }
     #endregion
 
@@ -42,8 +42,8 @@ public class PacketManager {
 
     public void Register() {
       
-        _onRecv.Add((ushort)PacketID.S_Test, MakePacket<S_Test>);
-        _handler.Add((ushort)PacketID.S_Test, PacketHandler.S_TestHandler);
+        _onRecv.Add((ushort)PacketID.S_Chat, MakePacket<S_Chat>);
+        _handler.Add((ushort)PacketID.S_Chat, PacketHandler.S_ChatHandler);
 
     }
 }

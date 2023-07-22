@@ -36,7 +36,7 @@ public abstract class Session {
     private int _disconnected = 0;
     RecvBuffer _recvBuffer = new RecvBuffer(1024);
     private Queue<ArraySegment<byte>> _sendQueue = new();
-    private object _sendLock = new();
+    private object _lock = new();
     private List<ArraySegment<byte>> _pendingList = new();
     private SocketAsyncEventArgs _recvArgs = new();
     private SocketAsyncEventArgs _sendArgs = new();
@@ -55,19 +55,34 @@ public abstract class Session {
         RegisterRecv();
     }
 
+    void Clear() {
+        lock (_lock) {
+            _sendQueue.Clear();
+            _pendingList.Clear();
+        }
+    }
+
     public void Disconnect() {
         if (Interlocked.Exchange(ref _disconnected, 1) == 1) return;
-        OnDisconnected(_socket?.RemoteEndPoint);
-        _socket?.Shutdown(SocketShutdown.Both);
-        _socket?.Close();
+        OnDisconnected(_socket.RemoteEndPoint);
+        _socket.Shutdown(SocketShutdown.Both);
+        _socket.Close();
+        Clear();
     }
 
     private void RegisterRecv() {
+        if (_disconnected == 1) return;
+
         _recvBuffer.Clean();
         var segment = _recvBuffer.WriteSegment;
         _recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
-        var pending = _socket != null && _socket.ReceiveAsync(_recvArgs);
-        if (pending == false) OnRecvCompleted(null, _recvArgs);
+        try {
+            var pending = _socket.ReceiveAsync(_recvArgs);
+            if (pending == false) OnRecvCompleted(null, _recvArgs);
+        }
+        catch (Exception e) {
+            Console.WriteLine($"RegisterRecv failed {e}");
+        }
     }
 
 
@@ -103,13 +118,17 @@ public abstract class Session {
 
 
     public void Send(ArraySegment<byte> sendBuffer) {
-        lock (_sendLock) {
+        lock (_lock) {
             _sendQueue.Enqueue(sendBuffer);
             if (_pendingList.Count == 0) RegisterSend();
         }
     }
 
     private void RegisterSend() {
+        if (_disconnected == 1) {
+            return;
+        }
+
         while (_sendQueue.Count > 0) {
             var sendBuffer = _sendQueue.Dequeue();
             _pendingList.Add(sendBuffer);
@@ -117,12 +136,17 @@ public abstract class Session {
 
         _sendArgs.BufferList = _pendingList;
 
-        var pending = _socket?.SendAsync(_sendArgs);
-        if (pending == false) OnSendCompleted(null, _sendArgs);
+        try {
+            var pending = _socket.SendAsync(_sendArgs);
+            if (pending == false) OnSendCompleted(null, _sendArgs);
+        }
+        catch (Exception e) {
+            Console.WriteLine($"RegisterSend failed {e}");
+        }
     }
 
     private void OnSendCompleted(object value, SocketAsyncEventArgs args) {
-        lock (_sendLock) {
+        lock (_lock) {
             if (args.SocketError == SocketError.Success && args.BytesTransferred > 0)
                 try {
                     _sendArgs.BufferList = null;

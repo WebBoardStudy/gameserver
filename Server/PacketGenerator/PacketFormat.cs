@@ -13,14 +13,14 @@ using ServerCore;
 
 public class PacketManager {{
     #region Singleton
-    static PacketManager _instance;
+    static PacketManager _instance = new PacketManager();
     public static PacketManager Instance {{
-        get {{
-            if (_instance == null) {{
-                _instance = new PacketManager();
-            }}
+        get {{            
             return _instance;
         }}
+    }}
+    public PacketManager() {{
+        Register();
     }}
     #endregion
 
@@ -203,7 +203,7 @@ count += sizeof({1});";
 
         // {0} 변수 이름
         public static string writeStringFormat =
-@"ushort {0}Len = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length,  segment.Array, segment.Offset + count + sizeof(ushort));
+@"ushort {0}Len = (ushort)Encoding.Unicode.GetBytes(this.{0}, 0, this.{0}.Length,  segment.Array, segment.Offset + count + sizeof(ushort));
 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), {0}Len);
 count += sizeof(ushort);
 count += {0}Len;";
