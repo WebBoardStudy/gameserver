@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,9 +11,11 @@ public class Managers : MonoBehaviour
     #region Contents
     MapManager _map = new MapManager();
     ObjectManager _obj = new ObjectManager();
+    NetworkManager _network = new NetworkManager();
 
     public static MapManager Map { get { return Instance._map; } }
     public static ObjectManager Object { get { return Instance._obj; } }
+    public static NetworkManager Network { get { return Instance._network; } }
 	#endregion
 
 	#region Core
@@ -38,28 +41,36 @@ public class Managers : MonoBehaviour
 
     void Update()
     {
-
+        _network.Update();
     }
 
     static void Init()
     {
         if (s_instance == null)
         {
-			GameObject go = GameObject.Find("@Managers");
+            GameObject go = GameObject.Find("@Managers");
             if (go == null)
             {
-                go = new GameObject { name = "@Managers" };
+                go = new GameObject {name = "@Managers"};
                 go.AddComponent<Managers>();
             }
 
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
+            try
+            {
+                s_instance._network.Init();
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Exeption = {e}");
+            }
 
             s_instance._data.Init();
             s_instance._pool.Init();
             s_instance._sound.Init();
-        }		
-	}
+        }
+    }
 
     public static void Clear()
     {
