@@ -323,9 +323,6 @@
      <Reference Include="log4netPlastic">
      <HintPath>D:\study\gameserver\Client\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
      </Reference>
-     <Reference Include="ServerCore">
-     <HintPath>D:\study\gameserver\Client\Assets\Libs\ServerCore.dll</HintPath>
-     </Reference>
      <Reference Include="Google.Protobuf">
      <HintPath>D:\study\gameserver\Client\Assets\Libs\Google.Protobuf.dll</HintPath>
      </Reference>

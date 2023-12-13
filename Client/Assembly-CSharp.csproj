@@ -62,18 +62,21 @@
      <Compile Include="Assets\Scripts\Managers\Managers.cs" />
      <Compile Include="Assets\Scripts\Managers\Core\Poolable.cs" />
      <Compile Include="Assets\Scripts\Data\Data.Contents.cs" />
+     <Compile Include="Assets\Scripts\ServerCore\Session.cs" />
      <Compile Include="Assets\Scripts\Packet\ServerSession.cs" />
      <Compile Include="Assets\Scripts\Controllers\ArrowController.cs" />
      <Compile Include="Assets\Scripts\Managers\Contents\MapManager.cs" />
      <Compile Include="Assets\Scripts\Packet\Protocol.cs" />
      <Compile Include="Assets\Scripts\Controllers\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Scenes\GameScene.cs" />
+     <Compile Include="Assets\Scripts\ServerCore\RecvBuffer.cs" />
      <Compile Include="Assets\Scripts\UI\UI_EventHandler.cs" />
      <Compile Include="Assets\Scripts\Packet\PacketQueue.cs" />
      <Compile Include="Assets\Scripts\Managers\Core\SoundManager.cs" />
      <Compile Include="Assets\Scripts\Packet\ClientPacketManager.cs" />
      <Compile Include="Assets\Scripts\Packet\PacketHandler.cs" />
      <Compile Include="Assets\Scripts\UI\Scene\UI_Scene.cs" />
+     <Compile Include="Assets\Scripts\ServerCore\Connector.cs" />
      <Compile Include="Assets\Scripts\Managers\Core\ResourceManager.cs" />
      <Compile Include="Assets\Scripts\Scenes\BaseScene.cs" />
      <Folder Include="Assets" />
@@ -125,6 +128,7 @@
      <Folder Include="Assets\TinyRPGTown\Scenes" />
      <Folder Include="Assets\Scripts\Scenes" />
      <Folder Include="Assets\Tiny RPG Forest\Artwork\sprites\mole\idle" />
+     <Folder Include="Assets\Scripts\ServerCore" />
      <Folder Include="Assets\Scripts\UI\Scene" />
      <Folder Include="Assets\Tiny RPG Forest\Artwork" />
      <Folder Include="Assets\Resources\Prefabs" />
@@ -411,9 +415,6 @@
      </Reference>
      <Reference Include="UnityEditor.UnityConnectModule">
      <HintPath>C:\Users\NHN\unity\2022.3.12f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
-     </Reference>
-     <Reference Include="ServerCore">
-     <HintPath>D:\study\gameserver\Client\Assets\Libs\ServerCore.dll</HintPath>
      </Reference>
      <Reference Include="Google.Protobuf">
      <HintPath>D:\study\gameserver\Client\Assets\Libs\Google.Protobuf.dll</HintPath>
