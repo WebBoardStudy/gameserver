@@ -2,12 +2,14 @@
 using System.Net;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Game;
 using ServerCore;
 
 namespace Server
 {
-    class ClientSession : PacketSession
+    public class ClientSession : PacketSession
     {
+        public Player MyPlaeyr { get; set; }
         public int SessionId { get; set; }
 
         public override void OnConnected(EndPoint endPoint)
@@ -15,28 +17,25 @@ namespace Server
             Console.WriteLine($"OnConnected : {endPoint}");
 
             // PROTO Test
-            S_Chat chat = new S_Chat()
+            MyPlaeyr = PlayerManager.Instance.Add();
             {
-                Context = "안녕하세요"
-            };
+                MyPlaeyr.info.Name = $"Player_{MyPlaeyr.info.PlayerId}";
+                MyPlaeyr.info.PosX = 0;
+                MyPlaeyr.info.PosY = 0;
+                MyPlaeyr.Session = this;
+            }
 
-            Send(chat);
-
-            //S_Chat chat2 = new S_Chat();
-            //chat2.MergeFrom(sendBuffer, 4, sendBuffer.Length - 4);
-            //////////////////////////
-            //////////////////////////
-            //Program.Room.Push(() => Program.Room.Enter(this));
+            RoomManager.Instance.Find(1).EnterGame(MyPlaeyr);
         }
 
-        private void Send(IMessage paket)
+        public void Send(IMessage paket)
         {
             String msgName = paket.Descriptor.Name.Replace("_", string.Empty);
             MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
 
             ushort size = (ushort)paket.CalculateSize();
             byte[] sendBuffer = new byte[size + 4];
-            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            Array.Copy(BitConverter.GetBytes((ushort)(size + 4)), 0, sendBuffer, 0, sizeof(ushort));
             Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
             Array.Copy(paket.ToByteArray(), 0, sendBuffer, 4, size);
 
@@ -50,6 +49,8 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
+            RoomManager.Instance.Find(1).LeaveGame(MyPlaeyr.info.PlayerId);
+            
             SessionManager.Instance.Remove(this);
 
             Console.WriteLine($"OnDisconnected : {endPoint}");
