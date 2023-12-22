@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameScene : BaseScene
 {
@@ -9,13 +7,15 @@ public class GameScene : BaseScene
         base.Init();
 
         SceneType = Define.Scene.Game;
+        
+        Screen.SetResolution(640, 480, false);
 
         Managers.Map.LoadMap(1);
 
         //GameObject player = Managers.Resource.Instantiate("Creature/Player");
         //player.name = "Player";
         //Managers.Object.Add(player);
-        
+
 
         //Managers.UI.ShowSceneUI<UI_Inven>();
         //Dictionary<int, Data.Stat> dict = Managers.Data.StatDict;
@@ -32,6 +32,5 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
-        
     }
 }
