@@ -3,9 +3,11 @@ ScriptsOnlyBuild:
     Assembly-CSharp:
     - ArrowController
     - MonsterController
+    - MyPlayerController
     - PlayerController
     Assembly-CSharp.dll:
     - GameScene
+    - PlayerController
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridBrush
     - UnityEditor.Tilemaps.GridBrushEditor
@@ -63,15 +65,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 16590}
     - Class: 114
-      Script: {instanceID: 17290}
+      Script: {instanceID: 17292}
     - Class: 114
-      Script: {instanceID: 17584}
+      Script: {instanceID: 17586}
     - Class: 114
-      Script: {instanceID: 18456}
+      Script: {instanceID: 18458}
     - Class: 114
-      Script: {instanceID: 18556}
+      Script: {instanceID: 18558}
     - Class: 114
-      Script: {instanceID: 19298}
+      Script: {instanceID: 19300}
+    - Class: 114
+      Script: {instanceID: 20170}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -613,6 +617,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.AI.Navigation
     namespaceName: Unity.AI.Navigation
     className: NavMeshLink
+  - hash:
+      serializedVersion: 2
+      Hash: f23948449e2c81da6b2280942bad4b1e
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: MyPlayerController
   platform: 5
   scenePathNames:
   - Assets/Scenes/Game.unity

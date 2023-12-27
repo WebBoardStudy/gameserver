@@ -10,42 +10,63 @@ class PacketHandler
 	public static void S_EnterGameHandler(PacketSession session, IMessage packet)
 	{
 		S_EnterGame enterGamePacket = packet as S_EnterGame;
-		ServerSession serverSession = session as ServerSession;
+		if (enterGamePacket == null)
+		{
+			Debug.Log("enterGamePacket is null");
+			return;
+		}
 		
-		Debug.Log("S_EnterGameHandler");
-		Debug.Log(enterGamePacket.Player);
+		Managers.Object.Add(enterGamePacket.Player, true);
 	}
 	
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
 	{
 		var gamePacket = packet as S_LeaveGame;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log("S_LeaveGameHandler");
+		if (gamePacket == null)
+		{
+			Debug.Log("S_LeaveGame is null");
+			return;
+		}
+		Managers.Object.RemoveMyPlayer();
 	}
 	
 	public static void S_SpawnHandler(PacketSession session, IMessage packet)
 	{
 		var gamePacket = packet as S_Spawn;
-		ServerSession serverSession = session as ServerSession;
+		if (gamePacket == null)
+		{
+			Debug.Log("S_Spawn is null");
+			return;
+		}
 		
-		Debug.Log("S_SpawnHandler");
-		Debug.Log(gamePacket.Players);
+		foreach (var player in gamePacket.Players)
+		{
+			Managers.Object.Add(player, false);
+		}
 	}
 	
 	public static void S_DespawnHandler(PacketSession session, IMessage packet)
 	{
 		var gamePacket = packet as S_Despawn;
-		ServerSession serverSession = session as ServerSession;
+		if (gamePacket == null)
+		{
+			Debug.Log("S_Despawn is null");
+			return;
+		}
 		
-		Debug.Log("S_DespawnHandler");
+		foreach (var playerId in gamePacket.PlayerIds)
+		{
+			Managers.Object.Remove(playerId);
+		}
 	}
 	
 	public static void S_MoveHandler(PacketSession session, IMessage packet)
 	{
 		var gamePacket = packet as S_Move;
-		ServerSession serverSession = session as ServerSession;
-		
-		Debug.Log("S_MoveHandler");
+		if (gamePacket == null)
+		{
+			Debug.Log("S_Move is null");
+			return;
+		}
 	}
 }
