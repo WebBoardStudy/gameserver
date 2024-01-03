@@ -3,7 +3,6 @@ using Google.Protobuf.Protocol;
 using ServerCore;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 
 class PacketManager
 {
@@ -53,7 +52,6 @@ class PacketManager
 	{
 		T pkt = new T();
 		pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
-
 		if (CustomHandler != null)
 		{
 			CustomHandler.Invoke(session, pkt, id);

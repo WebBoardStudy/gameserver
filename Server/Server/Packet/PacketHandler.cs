@@ -11,8 +11,22 @@ class PacketHandler
 	public static void C_MoveHandler(PacketSession session, IMessage packet)
 	{
 		C_Move movePacket = packet as C_Move;
-		ClientSession serverSession = session as ClientSession;
+		if (movePacket == null)
+			return;
+		ClientSession clientSession = session as ClientSession;
+		Console.WriteLine($"C_Move ({movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY}");
+		if (clientSession?.MyPlayer.Room == null)
+			return;
 
-	
+		PlayerInfo playerInfo = clientSession.MyPlayer.Info;
+		playerInfo.PosInfo = movePacket.PosInfo;
+
+		S_Move sMove = new S_Move
+		{
+			PlayerId = playerInfo.PlayerId,
+			PosInfo = movePacket.PosInfo
+		};
+		clientSession.MyPlayer.Room.Broadcast(sMove);
+		
 	}
 }
