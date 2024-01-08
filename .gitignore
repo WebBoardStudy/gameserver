@@ -350,3 +350,9 @@ MigrationBackup/
 .ionide/
 .DS_Store
 .idea/
+
+Common/ClientPacketManager.cs
+
+Common/Protocol.cs
+
+Common/ServerPacketManager.cs
