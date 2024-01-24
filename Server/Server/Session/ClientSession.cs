@@ -6,7 +6,7 @@ using ServerCore;
 
 namespace Server
 {
-    class ClientSession : PacketSession
+    public class ClientSession : PacketSession
     {
         public int SessionId { get; set; }
 
@@ -16,7 +16,7 @@ namespace Server
             MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
             ushort size = (ushort)packet.CalculateSize();
             byte[] sendBuffer = new byte[size + 4];
-            Array.Copy(BitConverter.GetBytes(size + 4), 0, sendBuffer, 0, sizeof(ushort));
+            Array.Copy(BitConverter.GetBytes((ushort)(size + 4)), 0, sendBuffer, 0, sizeof(ushort));
             Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
             Array.Copy(packet.ToByteArray(), 0, sendBuffer, 4, size);
 
@@ -28,11 +28,7 @@ namespace Server
             Console.WriteLine($"OnConnected : {endPoint}");
 
             // PROTO Test
-            S_Chat chat = new S_Chat()
-            {
-                Context = "안녕하세요"
-            };
-            Send(chat);
+            
         }
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
