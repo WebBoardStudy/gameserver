@@ -10,63 +10,48 @@ class PacketHandler
 	public static void S_EnterGameHandler(PacketSession session, IMessage packet)
 	{
 		S_EnterGame enterGamePacket = packet as S_EnterGame;
-		if (enterGamePacket == null)
-		{
-			Debug.Log("enterGamePacket is null");
-			return;
-		}
-		
-		Managers.Object.Add(enterGamePacket.Player, true);
+		Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
 	}
-	
+
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
 	{
-		var gamePacket = packet as S_LeaveGame;
-		if (gamePacket == null)
-		{
-			Debug.Log("S_LeaveGame is null");
-			return;
-		}
+		S_LeaveGame leaveGameHandler = packet as S_LeaveGame;
 		Managers.Object.RemoveMyPlayer();
 	}
-	
+
 	public static void S_SpawnHandler(PacketSession session, IMessage packet)
 	{
-		var gamePacket = packet as S_Spawn;
-		if (gamePacket == null)
+		S_Spawn spawnPacket = packet as S_Spawn;
+		foreach (PlayerInfo player in spawnPacket.Players)
 		{
-			Debug.Log("S_Spawn is null");
-			return;
-		}
-		
-		foreach (var player in gamePacket.Players)
-		{
-			Managers.Object.Add(player, false);
+			Managers.Object.Add(player, myPlayer: false);
 		}
 	}
-	
+
 	public static void S_DespawnHandler(PacketSession session, IMessage packet)
 	{
-		var gamePacket = packet as S_Despawn;
-		if (gamePacket == null)
+		S_Despawn despawnPacket = packet as S_Despawn;
+		foreach (int id in despawnPacket.PlayerIds)
 		{
-			Debug.Log("S_Despawn is null");
-			return;
-		}
-		
-		foreach (var playerId in gamePacket.PlayerIds)
-		{
-			Managers.Object.Remove(playerId);
+			Managers.Object.Remove(id);
 		}
 	}
-	
+
 	public static void S_MoveHandler(PacketSession session, IMessage packet)
 	{
-		var gamePacket = packet as S_Move;
-		if (gamePacket == null)
-		{
-			Debug.Log("S_Move is null");
+		S_Move movePacket = packet as S_Move;
+		ServerSession serverSession = session as ServerSession;
+
+		GameObject go = Managers.Object.FindById(movePacket.PlayerId);
+		if (go == null)
 			return;
-		}
+
+		CreatureController cc = go.GetComponent<CreatureController>();
+		if (cc == null)
+			return;
+
+		cc.PosInfo = movePacket.PosInfo;
 	}
 }
+
+
