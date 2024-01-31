@@ -16,6 +16,7 @@ public class RoomManager
         {
             gameRoom.RoomId = _roomId;
             _rooms.Add(_roomId, gameRoom);
+            _roomId++;
         }
 
         return gameRoom;
