@@ -61,3 +61,5 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+Server/PacketGenerator/obj/
+Server/PacketGenerator/bin/

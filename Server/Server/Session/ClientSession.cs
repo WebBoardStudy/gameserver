@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ServerCore;
 using System.Net;
-using Google.Protobuf.Protocol;
+using Protocol;
 using Google.Protobuf;
 using Server.Game;
 
@@ -40,7 +40,7 @@ namespace Server
 				MyPlayer.Info.PosInfo.State = CreatureState.Idle;
 				MyPlayer.Info.PosInfo.MoveDir = MoveDir.None;
 				MyPlayer.Info.PosInfo.PosX = 0;
-				MyPlayer.Info.PosInfo.PosY = 1;
+				MyPlayer.Info.PosInfo.PosY = 0;
 				MyPlayer.Session = this;
 			}
 			

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Google.Protobuf;
-using Google.Protobuf.Protocol;
+using Protocol;
 
 namespace Server.Game;
 

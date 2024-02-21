@@ -1,5 +1,5 @@
 using Google.Protobuf;
-using Google.Protobuf.Protocol;
+using Protocol;
 using ServerCore;
 using System;
 using System.Collections.Generic;

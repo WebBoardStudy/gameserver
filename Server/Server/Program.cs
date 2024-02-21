@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
-using Google.Protobuf.Protocol;
+using Protocol;
 using Google.Protobuf.WellKnownTypes;
 using Server.Game;
 using ServerCore;

@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "dgSpecHash": "73WsQk9NzZG6g5/n0+bneGpx29SUeLfyB7OnDjngsSOMwkUairji+XNqXguXX55xB+/5ZlbeVdjoECaUoBsjaA==",
+  "success": true,
+  "projectFilePath": "H:\\study\\game_server\\Server\\Server\\Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\kauri\\.nuget\\packages\\google.protobuf\\3.12.3\\google.protobuf.3.12.3.nupkg.sha512",
+    "C:\\Users\\kauri\\.nuget\\packages\\system.memory\\4.5.2\\system.memory.4.5.2.nupkg.sha512",
+    "C:\\Users\\kauri\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.16\\microsoft.windowsdesktop.app.ref.7.0.16.nupkg.sha512",
+    "C:\\Users\\kauri\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.16\\microsoft.netcore.app.ref.7.0.16.nupkg.sha512",
+    "C:\\Users\\kauri\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.16\\microsoft.aspnetcore.app.ref.7.0.16.nupkg.sha512",
+    "C:\\Users\\kauri\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.16\\microsoft.netcore.app.host.win-x64.7.0.16.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "'Google.Protobuf' 3.12.3 패키지에 알려진 높은 심각도 취약성인 https://github.com/advisories/GHSA-77rm-9x9h-xj3g이(가) 있습니다.",
+      "libraryId": "Google.Protobuf",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
+}

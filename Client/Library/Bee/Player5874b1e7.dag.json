@@ -139,10 +139,7 @@
         131,
         132,
         133,
-        134,
-        135,
-        136,
-        137
+        134
       ],
       "OverwriteOutputs": false,
       "DebugActionIndex": 0
@@ -272,7 +269,7 @@
       "DisplayName": "Writing boot.config_tyr4.info",
       "ActionType": "WriteFile",
       "PayloadOffset": 83,
-      "PayloadLength": 13955,
+      "PayloadLength": 13695,
       "PayloadDebugContentSnippet": "{\"System.Object\":null,\"Bee.Tun",
       "Inputs": [],
       "Outputs": [
@@ -366,9 +363,6 @@
         "H:/unity_hub/Editor/2022.3.12f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/Variations/mono/Managed/UnityEngine.XRModule.dll",
         "H:/unity_hub/Editor/2022.3.12f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/Variations/mono/Managed/UnityEngine.dll",
         "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Assembly-CSharp.dll",
-        "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Unity.Timeline.dll",
-        "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Unity.AI.Navigation.dll",
-        "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Unity.TextMeshPro.dll",
         "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/UnityEngine.UI.dll",
         "H:/study/game_server/Client/Assets/Libs/Google.Protobuf.dll",
         "H:/study/game_server/Client/Assets/Libs/System.Runtime.CompilerServices.Unsafe.dll",
@@ -1286,42 +1280,6 @@
       "DebugActionIndex": 82
     },
     {
-      "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/Unity.Timeline.dll",
-      "DisplayName": "Copying Unity.Timeline.dll",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Unity.Timeline.dll"
-      ],
-      "Outputs": [
-        "Builds/Client1/Client1_Data/Managed/Unity.Timeline.dll"
-      ],
-      "DebugActionIndex": 83
-    },
-    {
-      "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/Unity.AI.Navigation.dll",
-      "DisplayName": "Copying Unity.AI.Navigation.dll",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Unity.AI.Navigation.dll"
-      ],
-      "Outputs": [
-        "Builds/Client1/Client1_Data/Managed/Unity.AI.Navigation.dll"
-      ],
-      "DebugActionIndex": 84
-    },
-    {
-      "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/Unity.TextMeshPro.dll",
-      "DisplayName": "Copying Unity.TextMeshPro.dll",
-      "ActionType": "CopyFiles",
-      "Inputs": [
-        "H:/study/game_server/Client/Library/Bee/PlayerScriptAssemblies/Unity.TextMeshPro.dll"
-      ],
-      "Outputs": [
-        "Builds/Client1/Client1_Data/Managed/Unity.TextMeshPro.dll"
-      ],
-      "DebugActionIndex": 85
-    },
-    {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/UnityEngine.UI.dll",
       "DisplayName": "Copying UnityEngine.UI.dll",
       "ActionType": "CopyFiles",
@@ -1331,7 +1289,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/UnityEngine.UI.dll"
       ],
-      "DebugActionIndex": 86
+      "DebugActionIndex": 83
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/Google.Protobuf.dll",
@@ -1343,7 +1301,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/Google.Protobuf.dll"
       ],
-      "DebugActionIndex": 87
+      "DebugActionIndex": 84
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Runtime.CompilerServices.Unsafe.dll",
@@ -1355,7 +1313,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Runtime.CompilerServices.Unsafe.dll"
       ],
-      "DebugActionIndex": 88
+      "DebugActionIndex": 85
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Memory.dll",
@@ -1367,7 +1325,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Memory.dll"
       ],
-      "DebugActionIndex": 89
+      "DebugActionIndex": 86
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/netstandard.dll",
@@ -1379,7 +1337,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/netstandard.dll"
       ],
-      "DebugActionIndex": 90
+      "DebugActionIndex": 87
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/Mono.Security.dll",
@@ -1391,7 +1349,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/Mono.Security.dll"
       ],
-      "DebugActionIndex": 91
+      "DebugActionIndex": 88
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.ComponentModel.Composition.dll",
@@ -1403,7 +1361,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.ComponentModel.Composition.dll"
       ],
-      "DebugActionIndex": 92
+      "DebugActionIndex": 89
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Configuration.dll",
@@ -1415,7 +1373,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Configuration.dll"
       ],
-      "DebugActionIndex": 93
+      "DebugActionIndex": 90
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Core.dll",
@@ -1427,7 +1385,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Core.dll"
       ],
-      "DebugActionIndex": 94
+      "DebugActionIndex": 91
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Data.DataSetExtensions.dll",
@@ -1439,7 +1397,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Data.DataSetExtensions.dll"
       ],
-      "DebugActionIndex": 95
+      "DebugActionIndex": 92
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Data.dll",
@@ -1451,7 +1409,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Data.dll"
       ],
-      "DebugActionIndex": 96
+      "DebugActionIndex": 93
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Drawing.dll",
@@ -1463,7 +1421,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Drawing.dll"
       ],
-      "DebugActionIndex": 97
+      "DebugActionIndex": 94
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.EnterpriseServices.dll",
@@ -1475,7 +1433,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.EnterpriseServices.dll"
       ],
-      "DebugActionIndex": 98
+      "DebugActionIndex": 95
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.IO.Compression.FileSystem.dll",
@@ -1487,7 +1445,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.IO.Compression.FileSystem.dll"
       ],
-      "DebugActionIndex": 99
+      "DebugActionIndex": 96
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.IO.Compression.dll",
@@ -1499,7 +1457,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.IO.Compression.dll"
       ],
-      "DebugActionIndex": 100
+      "DebugActionIndex": 97
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Net.Http.dll",
@@ -1511,7 +1469,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Net.Http.dll"
       ],
-      "DebugActionIndex": 101
+      "DebugActionIndex": 98
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Numerics.dll",
@@ -1523,7 +1481,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Numerics.dll"
       ],
-      "DebugActionIndex": 102
+      "DebugActionIndex": 99
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Runtime.Serialization.dll",
@@ -1535,7 +1493,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Runtime.Serialization.dll"
       ],
-      "DebugActionIndex": 103
+      "DebugActionIndex": 100
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Security.dll",
@@ -1547,7 +1505,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Security.dll"
       ],
-      "DebugActionIndex": 104
+      "DebugActionIndex": 101
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.ServiceModel.Internals.dll",
@@ -1559,7 +1517,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.ServiceModel.Internals.dll"
       ],
-      "DebugActionIndex": 105
+      "DebugActionIndex": 102
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Transactions.dll",
@@ -1571,7 +1529,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Transactions.dll"
       ],
-      "DebugActionIndex": 106
+      "DebugActionIndex": 103
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Xml.Linq.dll",
@@ -1583,7 +1541,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Xml.Linq.dll"
       ],
-      "DebugActionIndex": 107
+      "DebugActionIndex": 104
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.Xml.dll",
@@ -1595,7 +1553,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.Xml.dll"
       ],
-      "DebugActionIndex": 108
+      "DebugActionIndex": 105
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/System.dll",
@@ -1607,7 +1565,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/System.dll"
       ],
-      "DebugActionIndex": 109
+      "DebugActionIndex": 106
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Managed/mscorlib.dll",
@@ -1619,20 +1577,20 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Managed/mscorlib.dll"
       ],
-      "DebugActionIndex": 110
+      "DebugActionIndex": 107
     },
     {
       "Annotation": "WriteText Library/Bee/artifacts/WinPlayerBuildProgram/Data/app.info",
       "DisplayName": "Writing app.info",
       "ActionType": "WriteFile",
-      "PayloadOffset": 14127,
+      "PayloadOffset": 13867,
       "PayloadLength": 24,
       "PayloadDebugContentSnippet": "DefaultCompany\nMMO_Unity",
       "Inputs": [],
       "Outputs": [
         "Library/Bee/artifacts/WinPlayerBuildProgram/Data/app.info"
       ],
-      "DebugActionIndex": 111
+      "DebugActionIndex": 108
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/app.info",
@@ -1645,9 +1603,9 @@
         "Builds/Client1/Client1_Data/app.info"
       ],
       "ToBuildDependencies": [
-        111
+        108
       ],
-      "DebugActionIndex": 112
+      "DebugActionIndex": 109
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1_Data/Resources/unity default resources",
@@ -1659,7 +1617,7 @@
       "Outputs": [
         "Builds/Client1/Client1_Data/Resources/unity default resources"
       ],
-      "DebugActionIndex": 113
+      "DebugActionIndex": 110
     },
     {
       "Annotation": "CopyFiles Builds/Client1/Client1.exe",
@@ -1671,7 +1629,7 @@
       "Outputs": [
         "Builds/Client1/Client1.exe"
       ],
-      "DebugActionIndex": 114
+      "DebugActionIndex": 111
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll",
@@ -1683,7 +1641,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll"
       ],
-      "DebugActionIndex": 115
+      "DebugActionIndex": 112
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/EmbedRuntime/MonoPosixHelper.dll",
@@ -1695,7 +1653,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/EmbedRuntime/MonoPosixHelper.dll"
       ],
-      "DebugActionIndex": 116
+      "DebugActionIndex": 113
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/2.0/Browsers/Compat.browser",
@@ -1707,7 +1665,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/2.0/Browsers/Compat.browser"
       ],
-      "DebugActionIndex": 117
+      "DebugActionIndex": 114
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx",
@@ -1719,7 +1677,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx"
       ],
-      "DebugActionIndex": 118
+      "DebugActionIndex": 115
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/2.0/machine.config",
@@ -1731,7 +1689,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/2.0/machine.config"
       ],
-      "DebugActionIndex": 119
+      "DebugActionIndex": 116
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/2.0/settings.map",
@@ -1743,7 +1701,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/2.0/settings.map"
       ],
-      "DebugActionIndex": 120
+      "DebugActionIndex": 117
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/2.0/web.config",
@@ -1755,7 +1713,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/2.0/web.config"
       ],
-      "DebugActionIndex": 121
+      "DebugActionIndex": 118
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.0/Browsers/Compat.browser",
@@ -1767,7 +1725,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.0/Browsers/Compat.browser"
       ],
-      "DebugActionIndex": 122
+      "DebugActionIndex": 119
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx",
@@ -1779,7 +1737,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx"
       ],
-      "DebugActionIndex": 123
+      "DebugActionIndex": 120
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.0/machine.config",
@@ -1791,7 +1749,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.0/machine.config"
       ],
-      "DebugActionIndex": 124
+      "DebugActionIndex": 121
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.0/settings.map",
@@ -1803,7 +1761,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.0/settings.map"
       ],
-      "DebugActionIndex": 125
+      "DebugActionIndex": 122
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.0/web.config",
@@ -1815,7 +1773,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.0/web.config"
       ],
-      "DebugActionIndex": 126
+      "DebugActionIndex": 123
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.5/Browsers/Compat.browser",
@@ -1827,7 +1785,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.5/Browsers/Compat.browser"
       ],
-      "DebugActionIndex": 127
+      "DebugActionIndex": 124
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx",
@@ -1839,7 +1797,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx"
       ],
-      "DebugActionIndex": 128
+      "DebugActionIndex": 125
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.5/machine.config",
@@ -1851,7 +1809,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.5/machine.config"
       ],
-      "DebugActionIndex": 129
+      "DebugActionIndex": 126
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.5/settings.map",
@@ -1863,7 +1821,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.5/settings.map"
       ],
-      "DebugActionIndex": 130
+      "DebugActionIndex": 127
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/4.5/web.config",
@@ -1875,7 +1833,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/4.5/web.config"
       ],
-      "DebugActionIndex": 131
+      "DebugActionIndex": 128
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/browscap.ini",
@@ -1887,7 +1845,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/browscap.ini"
       ],
-      "DebugActionIndex": 132
+      "DebugActionIndex": 129
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/config",
@@ -1899,7 +1857,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/config"
       ],
-      "DebugActionIndex": 133
+      "DebugActionIndex": 130
     },
     {
       "Annotation": "CopyFiles Builds/Client1/MonoBleedingEdge/etc/mono/mconfig/config.xml",
@@ -1911,7 +1869,7 @@
       "Outputs": [
         "Builds/Client1/MonoBleedingEdge/etc/mono/mconfig/config.xml"
       ],
-      "DebugActionIndex": 134
+      "DebugActionIndex": 131
     },
     {
       "Annotation": "CopyFiles Builds/Client1/UnityCrashHandler32.exe",
@@ -1923,7 +1881,7 @@
       "Outputs": [
         "Builds/Client1/UnityCrashHandler32.exe"
       ],
-      "DebugActionIndex": 135
+      "DebugActionIndex": 132
     },
     {
       "Annotation": "CopyFiles Builds/Client1/UnityPlayer.dll",
@@ -1935,7 +1893,7 @@
       "Outputs": [
         "Builds/Client1/UnityPlayer.dll"
       ],
-      "DebugActionIndex": 136
+      "DebugActionIndex": 133
     },
     {
       "Annotation": "Player",
@@ -2048,9 +2006,9 @@
         105,
         106,
         107,
-        108,
         109,
         110,
+        111,
         112,
         113,
         114,
@@ -2072,13 +2030,10 @@
         130,
         131,
         132,
-        133,
-        134,
-        135,
-        136
+        133
       ],
       "OverwriteOutputs": false,
-      "DebugActionIndex": 137
+      "DebugActionIndex": 134
     }
   ],
   "FileSignatures": [
@@ -2279,7 +2234,7 @@
   "EmitDataForBeeWhy": 0,
         "NamedNodes": {
           "all_tundra_nodes": 0,
-          "Player": 137
+          "Player": 134
         }
 ,  "DefaultNodes": [
     0
