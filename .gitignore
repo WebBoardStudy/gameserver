@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/[Bb]in/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -63,3 +64,9 @@ sysinfo.txt
 crashlytics-build.properties
 Server/PacketGenerator/obj/
 Server/PacketGenerator/bin/
+Server/ServerCore/obj/
+Server/ServerCore/bin/
+Server/Server/obj/
+Server/Server/bin/
+Client/Builds/
+

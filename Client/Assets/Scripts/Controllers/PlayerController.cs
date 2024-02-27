@@ -1,4 +1,5 @@
 ﻿using Protocol;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -103,22 +104,28 @@ public class PlayerController : CreatureController
 		}
 	}
 
-	IEnumerator CoStartPunch()
-	{
-		// 피격 판정
-		GameObject go = Managers.Object.Find(GetFrontCellPos());
-		if (go != null)
+    internal void UseSkill(int skillId)
+    {
+        if (skillId == 1)
 		{
-			CreatureController cc = go.GetComponent<CreatureController>();
-			if (cc != null)
-				cc.OnDamaged();
+			_coSkill = StartCoroutine("CoStartPunch");
 		}
+    }
 
+	protected virtual void CheckUpdatedFlag()
+	{
+
+	}
+
+    IEnumerator CoStartPunch()
+	{
 		// 대기 시간
 		_rangedSkill = false;
+		State = CreatureState.Skill;
 		yield return new WaitForSeconds(0.5f);
 		State = CreatureState.Idle;
 		_coSkill = null;
+        CheckUpdatedFlag();
 	}
 
 	IEnumerator CoStartShootArrow()
@@ -139,4 +146,6 @@ public class PlayerController : CreatureController
 	{
 		Debug.Log("Player HIT !");
 	}
+
+    
 }

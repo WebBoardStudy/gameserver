@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
 
@@ -92,6 +93,52 @@ public class GameRoom
             {
                 player.Session.Send(packet);
             }
+        }
+    }
+
+    public void HandleMove(Player player, C_Move movePacket)
+    {
+        if (player == null)
+            return;
+
+        lock (_lock)
+        {
+            player.Info.PosInfo = movePacket.PosInfo;
+
+            S_Move sMove = new S_Move
+            {
+                PlayerId = player.Info.PlayerId,
+                PosInfo = movePacket.PosInfo
+            };
+            Broadcast(sMove);
+        }      
+    }
+
+    public void HandleSkill(Player player, C_Skill skillPacket)
+    {
+        if (player == null)
+            return;
+
+        lock (_lock)
+        {
+            var info = player.Info;
+            if (info.PosInfo.State != CreatureState.Idle)
+                return;
+
+            // TODO : 스킬 사용 여부 체크
+
+            // 통과
+            info.PosInfo.State = CreatureState.Skill;
+
+            var pk = new S_Skill
+            {
+                PlayerId = player.Info.PlayerId,
+                Info = new SkillInfo()
+            };
+            pk.Info.SkillId = 1;
+            Broadcast(pk);
+
+            // 데미지 판정
         }
     }
 }
