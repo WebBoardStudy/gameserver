@@ -2,12 +2,14 @@
 using System.Net;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Game;
 using ServerCore;
 
 namespace Server
 {
     public class ClientSession : PacketSession
     {
+        public Player MyPlayer {get;set;}
         public int SessionId { get; set; }
 
         public void Send(IMessage packet)
@@ -28,7 +30,15 @@ namespace Server
             Console.WriteLine($"OnConnected : {endPoint}");
 
             // PROTO Test
-            
+            MyPlayer = PlayerManager.Instance.Add();
+            {
+                MyPlayer.Info.Name= $"Player_{MyPlayer.Info.PlayerId}";
+                MyPlayer.Info.PosX = 0;
+                MyPlayer.Info.PosY = 0;
+                MyPlayer.Session = this;
+            }
+
+            RoomManager.Instance.Find(1).EnterGame(MyPlayer);
         }
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
@@ -38,6 +48,8 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
+            RoomManager.Instance.Find(1).LeaveGame(MyPlayer.Info.PlayerId);
+
             SessionManager.Instance.Remove(this);
 
             Console.WriteLine($"OnDisconnected : {endPoint}");

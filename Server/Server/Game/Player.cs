@@ -6,6 +6,6 @@ namespace Server.Game
     {
         public GameRoom Room { get; set; }
         public ClientSession Session { get; set; }
-        public PlayerInfo Info { get; set; }
+        public PlayerInfo Info { get; set; } = new PlayerInfo();
     }
 }
