@@ -10,15 +10,13 @@ public class NetworkManager
 {
 	ServerSession _session = new ServerSession();
 
-	public void Send(ArraySegment<byte> sendBuff)
+	public void Send(IMessage packet)
 	{
-		_session.Send(sendBuff);
+		_session.Send(packet);
 	}
 
 	public void Init()
 	{
-		Debug.Log("NetworkManager Init start...");
-		
 		// DNS (Domain Name System)
 		string host = Dns.GetHostName();
 		IPHostEntry ipHost = Dns.GetHostEntry(host);
@@ -27,12 +25,9 @@ public class NetworkManager
 
 		Connector connector = new Connector();
 
-		Debug.Log("NetworkManager Connect start...");
-		
 		connector.Connect(endPoint,
 			() => { return _session; },
 			1);
-
 	}
 
 	public void Update()

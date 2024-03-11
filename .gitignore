@@ -352,3 +352,6 @@ MigrationBackup/
 .DS_Store
 .idea/
 Server/PacketGenerator/bin/
+Builds/OsxClient1/
+Builds/OsxClient1
+Builds/
