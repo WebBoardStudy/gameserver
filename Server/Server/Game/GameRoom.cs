@@ -10,7 +10,14 @@ public class GameRoom
     object _lock = new object();
     public int RoomId { get; set; }
 
-    List<Player> _players = new List<Player>();
+    Dictionary<int, Player> _players = new Dictionary<int, Player>();
+
+    Map _map = new Map();
+
+    public void Init(int mapId)
+    {
+        _map.LoadMap(mapId);
+    }
 
     public void EnterGame(Player newPlayer)
     {
@@ -21,16 +28,16 @@ public class GameRoom
 
         lock (_lock)
         {
-            _players.Add(newPlayer);
+            _players.Add(newPlayer.Info.PlayerId, newPlayer);
             newPlayer.Room = this;
-            
+
             // 본인한테 정보 전송
             {
                 S_EnterGame enterPacket = new S_EnterGame();
                 enterPacket.Player = newPlayer.Info;
                 newPlayer.Session.Send(enterPacket);
                 S_Spawn spawnPacket = new S_Spawn();
-                foreach (var player in _players)
+                foreach (var player in _players.Values)
                 {
                     if (newPlayer != player)
                     {
@@ -39,12 +46,12 @@ public class GameRoom
                 }
 
                 newPlayer.Session.Send(spawnPacket);
-            }      
+            }
             // 타인들한테 정보 전송
             {
                 S_Spawn spawnPacket = new S_Spawn();
                 spawnPacket.Players.Add(newPlayer.Info);
-                foreach (var player in _players)
+                foreach (var player in _players.Values)
                 {
                     if (newPlayer != player)
                     {
@@ -59,14 +66,11 @@ public class GameRoom
     {
         lock (_lock)
         {
-            Player player = _players.Find(p =>
-            {
-                return p.Info.PlayerId == playerId;
-            });   
-            if (player == null)
-                return;
+            Player player = null;
+            if (_players.Remove(playerId, out player))
+                if (player == null)
+                    return;
 
-            _players.Remove(player);
             player.Room = null;
 
             {
@@ -77,7 +81,7 @@ public class GameRoom
             {
                 S_Despawn despawnPk = new S_Despawn();
                 despawnPk.PlayerIds.Add(playerId);
-                foreach (var p in _players)
+                foreach (var p in _players.Values)
                 {
                     p.Session.Send(despawnPk);
                 }
@@ -89,7 +93,7 @@ public class GameRoom
     {
         lock (_lock)
         {
-            foreach (var player in _players)
+            foreach (var player in _players.Values)
             {
                 player.Session.Send(packet);
             }
@@ -103,7 +107,22 @@ public class GameRoom
 
         lock (_lock)
         {
-            player.Info.PosInfo = movePacket.PosInfo;
+            PositionInfo movePosInfo = movePacket.PosInfo;
+            PlayerInfo info = player.Info;
+
+            // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
+            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+            {
+                if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+                {
+                    return;
+                }
+            }
+
+            info.PosInfo.State = movePosInfo.State;
+            info.PosInfo.MoveDir = movePosInfo.MoveDir;
+
+            _map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
 
             S_Move sMove = new S_Move
             {
@@ -111,7 +130,7 @@ public class GameRoom
                 PosInfo = movePacket.PosInfo
             };
             Broadcast(sMove);
-        }      
+        }
     }
 
     public void HandleSkill(Player player, C_Skill skillPacket)
@@ -139,6 +158,14 @@ public class GameRoom
             Broadcast(pk);
 
             // 데미지 판정
+            var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+            var target = _map.Find(skillPos);
+            if (target == null)
+                return;
+
+            Console.WriteLine($"Hit Player! {target.Info.PlayerId}");
         }
     }
+
+
 }
