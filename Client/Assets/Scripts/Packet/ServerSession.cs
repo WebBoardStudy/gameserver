@@ -13,7 +13,7 @@ public class ServerSession : PacketSession
 	{
 		string msgName = packet.Descriptor.Name.Replace("_", string.Empty);
 		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
-		ushort size = (ushort)packet.CalculateSize();
+		ushort size = (ushort)packet.CalculateSize();   
 		byte[] sendBuffer = new byte[size + 4];
 		Array.Copy(BitConverter.GetBytes((ushort)(size + 4)), 0, sendBuffer, 0, sizeof(ushort));
 		Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, 2, sizeof(ushort));
