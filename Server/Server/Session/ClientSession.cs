@@ -20,8 +20,10 @@ namespace Server
             MyPlaeyr = PlayerManager.Instance.Add();
             {
                 MyPlaeyr.info.Name = $"Player_{MyPlaeyr.info.PlayerId}";
-                MyPlaeyr.info.PosX = 0;
-                MyPlaeyr.info.PosY = 0;
+                MyPlaeyr.info.PosInfo.State = CreatureState.Idle;
+                MyPlaeyr.info.PosInfo.MoveDir = MoveDir.None;
+                MyPlaeyr.info.PosInfo.PosX = 0;
+                MyPlaeyr.info.PosInfo.PosY = 0;
                 MyPlaeyr.Session = this;
             }
 

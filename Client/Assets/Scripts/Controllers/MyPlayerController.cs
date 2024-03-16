@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
@@ -27,14 +25,14 @@ public class MyPlayerController : PlayerController
 
     protected override void UpdateIdle()
     {
-        // ÀÌµ¿ »óÅÂ·Î °¥Áö È®ÀÎ
+        // ì´ë™ ìƒíƒœë¡œ ê°ˆì§€ í™•ì¸
         if (Dir != MoveDir.None)
         {
             State = CreatureState.Moving;
             return;
         }
 
-        // ½ºÅ³ »óÅÂ·Î °¥Áö È®ÀÎ
+        // ìŠ¤í‚¬ ìƒíƒœë¡œ ê°ˆì§€ í™•ì¸
         if (Input.GetKey(KeyCode.Space))
         {
             State = CreatureState.Skill;
@@ -48,7 +46,7 @@ public class MyPlayerController : PlayerController
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
     }
 
-    // Å°º¸µå ÀÔ·Â
+    // í‚¤ë³´ë“œ ì…ë ¥
     void GetDirInput()
     {
         if (Input.GetKey(KeyCode.W))
