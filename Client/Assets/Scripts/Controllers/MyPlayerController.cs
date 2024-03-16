@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using static Define;
 
@@ -68,6 +69,20 @@ public class MyPlayerController : PlayerController
         else
         {
             Dir = MoveDir.None;
+        }
+    }
+
+    protected override void MoveToNextPos()
+    {
+        CreatureState prevState = State;
+        Vector3Int preCellPos = CellPos;
+        base.MoveToNextPos();
+
+        if (prevState != State || CellPos != preCellPos)
+        {
+            C_Move movePacket = new C_Move();
+            movePacket.PosInfo = PosInfo;
+            Managers.Network.Send(movePacket);
         }
     }
 }
