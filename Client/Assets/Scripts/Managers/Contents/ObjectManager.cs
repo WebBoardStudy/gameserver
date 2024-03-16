@@ -40,7 +40,12 @@ public class ObjectManager
 
     public void Remove(int id)
     {
+        GameObject go = FindById(id);
+        if (go == null)
+            return;
+
         _objects.Remove(id);
+        Managers.Resource.Destroy(go);
     }
 
     public void RemoveMyPlaeyr()
@@ -87,6 +92,11 @@ public class ObjectManager
 
     public void Clear()
     {
+        foreach (GameObject obj in _objects.Values)
+        {
+            Managers.Resource.Destroy(obj);
+        }
+
         _objects.Clear();
     }
 }

@@ -74,15 +74,50 @@ public class MyPlayerController : PlayerController
 
     protected override void MoveToNextPos()
     {
-        CreatureState prevState = State;
-        Vector3Int preCellPos = CellPos;
-        base.MoveToNextPos();
+        if (Dir == MoveDir.None)
+        {
+            State = CreatureState.Idle;
+            CheckUpdateFlag();
+            return;
+        }
 
-        if (prevState != State || CellPos != preCellPos)
+        Vector3Int destPos = CellPos;
+
+        switch (Dir)
+        {
+            case MoveDir.Up:
+                destPos += Vector3Int.up;
+                break;
+            case MoveDir.Down:
+                destPos += Vector3Int.down;
+                break;
+            case MoveDir.Left:
+                destPos += Vector3Int.left;
+                break;
+            case MoveDir.Right:
+                destPos += Vector3Int.right;
+                break;
+        }
+
+        if (Managers.Map.CanGo(destPos))
+        {
+            if (Managers.Object.Find(destPos) == null)
+            {
+                CellPos = destPos;
+            }
+        }
+        
+        CheckUpdateFlag();
+    }
+
+    void CheckUpdateFlag()
+    {
+        if (_updated)
         {
             C_Move movePacket = new C_Move();
             movePacket.PosInfo = PosInfo;
             Managers.Network.Send(movePacket);
+            _updated = false;
         }
     }
 }
