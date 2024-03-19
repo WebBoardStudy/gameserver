@@ -1,3 +1,4 @@
+using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 using static Define;
@@ -34,12 +35,22 @@ public class MyPlayerController : PlayerController
         }
 
         // 스킬 상태로 갈지 확인
-        if (Input.GetKey(KeyCode.Space))
+        if (_coSkillCooltime == null && Input.GetKey(KeyCode.Space))
         {
-            State = CreatureState.Skill;
-            //_coSkill = StartCoroutine("CoStartPunch");
-            _coSkill = StartCoroutine("CoStartShootArrow");
+            Debug.Log("Skill !");
+            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            skill.Info.SkillId = 1;
+            Managers.Network.Send(skill);
+
+            _coSkillCooltime = StartCoroutine("CoInputCooltime", 0.2f);
         }
+    }
+
+    private Coroutine _coSkillCooltime;
+    IEnumerator CoInputCooltime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _coSkillCooltime = null;
     }
 
     void LateUpdate()
@@ -106,11 +117,11 @@ public class MyPlayerController : PlayerController
                 CellPos = destPos;
             }
         }
-        
+
         CheckUpdateFlag();
     }
 
-    void CheckUpdateFlag()
+    protected override void CheckUpdateFlag()
     {
         if (_updated)
         {
