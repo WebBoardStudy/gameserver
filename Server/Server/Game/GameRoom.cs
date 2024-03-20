@@ -34,8 +34,8 @@ namespace Server.Game
                         {
                             spawnPacket.Players.Add(p.Info);
                         }
-                        newPlayer.Session.Send(spawnPacket);
                     }
+                    newPlayer.Session.Send(spawnPacket);
                 }
 
                 // 타인한테 정보 전송
