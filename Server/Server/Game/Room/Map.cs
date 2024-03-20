@@ -1,14 +1,11 @@
 ﻿using Protocol;
+using Server.Game.Object;
 using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Server.Game
+namespace Server.Game.Room
 {
     public struct Pos
     {
@@ -61,7 +58,7 @@ namespace Server.Game
         public int SizeY { get { return MaxY - MinY + 1; } }
 
         bool[,] _collision;  // 벽 여부
-        Player[,] _players;
+        GameObject[,] _objects;
 
         public bool CanGo(Vector2Int cellPos, bool checkObjects = true)
         {
@@ -72,7 +69,7 @@ namespace Server.Game
 
             int x = cellPos.x - MinX;
             int y = MaxY - cellPos.y;
-            return !_collision[y, x] && (!checkObjects || _players[y, x] == null);
+            return !_collision[y, x] && (!checkObjects || _objects[y, x] == null);
         }
 
         public void LoadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
@@ -90,49 +87,56 @@ namespace Server.Game
             int xCount = MaxX - MinX + 1;
             int yCount = MaxY - MinY + 1;
             _collision = new bool[yCount, xCount];
-            _players = new Player[yCount, xCount];
+            _objects = new GameObject[yCount, xCount];
 
             for (int y = 0; y < yCount; y++)
             {
                 string line = reader.ReadLine();
                 for (int x = 0; x < xCount; x++)
                 {
-                    _collision[y, x] = (line[x] == '1' ? true : false);
+                    _collision[y, x] = line[x] == '1' ? true : false;
                 }
             }
         }
 
-        internal bool ApplyMove(Player player, Vector2Int dest)
+        internal bool ApplyMove(GameObject gameObject, Vector2Int dest)
         {
-            PositionInfo posInfo = player.Info.PosInfo;
-            if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
-                return false;
-            if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
-                return false;
+            ApplyLeave(gameObject);
 
             if (!CanGo(dest, true))
                 return false;
 
             {
-                int x = posInfo.PosX - MinX;
-                int y = MaxY - posInfo.PosY;
-                if (_players[y, x] == player)
-                    _players[y, x] = null;
-            }
-
-            {
                 int x = dest.x - MinX;
                 int y = MaxY - dest.y;
-                _players[y, x] = player;
+                _objects[y, x] = gameObject;
             }
 
-            posInfo.PosX = dest.x;
-            posInfo.PosY = dest.y;
+            gameObject.PosInfo.PosX = dest.x;
+            gameObject.PosInfo.PosY = dest.y;
 
             return true;
         }
 
-        internal Player Find(Vector2Int cellPos)
+        internal Boolean ApplyLeave(GameObject gameObject)
+        {
+            PositionInfo posInfo = gameObject.Info.PosInfo;
+            if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
+                return false;
+            if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
+                return false;
+
+            {
+                int x = posInfo.PosX - MinX;
+                int y = MaxY - posInfo.PosY;
+                if (_objects[y, x] == gameObject)
+                    _objects[y, x] = null;
+            }
+
+            return true;
+        }
+
+        internal GameObject Find(Vector2Int cellPos)
         {
             if (cellPos.x < MinX || cellPos.x > MaxX)
                 return null;
@@ -141,7 +145,7 @@ namespace Server.Game
 
             int x = cellPos.x - MinX;
             int y = MaxY - cellPos.y;
-            return _players[y, x];
+            return _objects[y, x];
         }
 
 
@@ -171,7 +175,7 @@ namespace Server.Game
             int[,] open = new int[SizeY, SizeX]; // OpenList
             for (int y = 0; y < SizeY; y++)
                 for (int x = 0; x < SizeX; x++)
-                    open[y, x] = Int32.MaxValue;
+                    open[y, x] = int.MaxValue;
 
             Pos[,] parent = new Pos[SizeY, SizeX];
 
@@ -265,7 +269,9 @@ namespace Server.Game
             // ArrayPos -> CellPos
             return new Vector2Int(pos.X + MinX, MaxY - pos.Y);
         }
-           
+
+
+
 
         #endregion
 
