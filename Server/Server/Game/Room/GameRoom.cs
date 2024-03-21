@@ -15,11 +15,11 @@ public class GameRoom
     Dictionary<int, Monster> _monsters = new Dictionary<int, Monster>();
     Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
-    Map _map = new Map();
+    public Map Map { get; private set; } = new Map();
 
     public void Init(int mapId)
     {
-        _map.LoadMap(mapId);
+        Map.LoadMap(mapId);
     }
 
     public void EnterGame(GameObject gameObject)
@@ -93,7 +93,7 @@ public class GameRoom
                         return;
 
                 player.Room = null;
-                _map.ApplyLeave(player);
+                Map.ApplyLeave(player);
                 {
                     S_LeaveGame leavePk = new S_LeaveGame();
                     player.Session.Send(leavePk);
@@ -106,7 +106,7 @@ public class GameRoom
                     if (monster == null)
                         return;
                 monster.Room = null;
-                _map.ApplyLeave(monster);
+                Map.ApplyLeave(monster);
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -164,7 +164,7 @@ public class GameRoom
             // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
             if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
-                if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+                if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
                 {
                     return;
                 }
@@ -173,7 +173,7 @@ public class GameRoom
             info.PosInfo.State = movePosInfo.State;
             info.PosInfo.MoveDir = movePosInfo.MoveDir;
 
-            _map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
+            Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
 
             S_Move sMove = new S_Move
             {
@@ -211,7 +211,7 @@ public class GameRoom
             {
                 // 데미지 판정
                 var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                var target = _map.Find(skillPos);
+                var target = Map.Find(skillPos);
                 if (target == null)
                     return;
 

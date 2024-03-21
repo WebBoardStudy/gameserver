@@ -1,10 +1,5 @@
 ﻿using Protocol;
 using Server.Game.Room;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.Game.Object
 {
@@ -13,7 +8,7 @@ namespace Server.Game.Object
         public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
         public GameRoom Room { get; set; }
         public ObjectInfo Info { get; set; } = new ObjectInfo();
-        public PositionInfo PosInfo { get; private set; }
+        public PositionInfo PosInfo { get; private set; } = new PositionInfo();
         public int Id
         {
             get { return Info.ObjectId; }
