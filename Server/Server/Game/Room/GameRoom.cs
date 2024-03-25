@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Protocol;
+using Server.Data;
 using Server.Game.Object;
 using System;
 using System.Collections.Generic;
@@ -206,8 +207,14 @@ public class GameRoom
 
             Broadcast(pk);
 
+            Skill sk;
+            DataManager.SkillDict.TryGetValue(pk.Info.SkillId, out sk);
+            if (sk == null)
+            {
+                return;
+            }
 
-            if (skillPacket.Info.SkillId == 1)
+            if (sk.skillType == SkillType.SkillAuto)
             {
                 // 데미지 판정
                 var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
@@ -217,11 +224,12 @@ public class GameRoom
 
                 Console.WriteLine($"Hit Player! {target.Info.ObjectId}");
             }
-            else if (skillPacket.Info.SkillId == 2)
+            else if (sk.skillType == SkillType.SkillProjectile)
             {
                 var arrow = ObjectManager.Instance.Add<Arrow>();
                 if (arrow == null)
                     return;
+                arrow.Data = sk;
                 arrow.Owner = player;
                 arrow.PosInfo.State = CreatureState.Moving;
                 arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
