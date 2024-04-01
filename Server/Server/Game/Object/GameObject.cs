@@ -9,6 +9,7 @@ namespace Server.Game.Object
         public GameRoom Room { get; set; }
         public ObjectInfo Info { get; set; } = new ObjectInfo();
         public PositionInfo PosInfo { get; private set; } = new PositionInfo();
+        public StatInfo Stat { get; private set; } = new StatInfo();
         public int Id
         {
             get { return Info.ObjectId; }
@@ -17,6 +18,13 @@ namespace Server.Game.Object
         public GameObject()
         {
             Info.PosInfo = PosInfo;
+            Info.StatInfo = Stat;
+        }
+
+        public float Speed
+        {
+            get { return Stat.Speed; }
+            set { Stat.Speed = value; }
         }
 
         public Vector2Int CellPos
@@ -58,6 +66,11 @@ namespace Server.Game.Object
         public Vector2Int GetFrontCellPos()
         {
             return GetFrontCellPos(PosInfo.MoveDir);
+        }
+
+        public virtual void OnDamaged(GameObject attacker, int damage)
+        {
+
         }
     }
 }

@@ -1,20 +1,14 @@
 ﻿using Protocol;
-using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
 using UnityEngine;
-using static Define;
 
 public class CreatureController : MonoBehaviour
 {
     public int Id { get; set; }
 
-    [SerializeField]
-    public float _speed = 5.0f;
-
     protected bool _updateFlag = false;
 
     PositionInfo _positionInfo = new PositionInfo();
+    StatInfo _stat = new StatInfo();
     public PositionInfo PosInfo
     {
         get { return _positionInfo; }
@@ -27,6 +21,25 @@ public class CreatureController : MonoBehaviour
             State = value.State;
             Dir = value.MoveDir;
         }
+    }
+
+    public StatInfo Stat
+    {
+        get { return _stat; }
+        set
+        {
+            if (_stat.Equals(value)) return;
+
+            _stat.Hp = value.Hp;
+            _stat.MaxHp = value.MaxHp;
+            _stat.Speed = value.Speed;
+        }
+    }
+
+    public float Speed
+    {
+        get { return Stat.Speed; }
+        set { Stat.Speed = value; }
     }
 
     public void SyncPos()
@@ -249,14 +262,14 @@ public class CreatureController : MonoBehaviour
 
         // 도착 여부 체크
         float dist = moveDir.magnitude;
-        if (dist < _speed * Time.deltaTime)
+        if (dist < Speed * Time.deltaTime)
         {
             transform.position = destPos;
             MoveToNextPos();
         }
         else
         {
-            transform.position += moveDir.normalized * _speed * Time.deltaTime;
+            transform.position += moveDir.normalized * Speed * Time.deltaTime;
             State = CreatureState.Moving;
         }
     }

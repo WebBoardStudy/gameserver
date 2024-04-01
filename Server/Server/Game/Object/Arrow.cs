@@ -17,7 +17,7 @@ namespace Server.Game.Object
             if (_nextUpdateTick >= Environment.TickCount64)
                 return;
 
-            long tick = (long)(1000 / Data.projectile.speed);
+            long tick = (long)(1000 / Speed);
             _nextUpdateTick = Environment.TickCount64 + tick;
 
             var destPos = GetFrontCellPos();
@@ -36,7 +36,7 @@ namespace Server.Game.Object
                 var target = Room.Map.Find(destPos);
                 if (target != null)
                 {
-                    // TODO : 피격 판정
+                    target.OnDamaged(this, Data.damage);
                 }
 
                 Room.LeaveGame(Id);
