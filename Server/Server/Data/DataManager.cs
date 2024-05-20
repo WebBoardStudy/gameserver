@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Protocol;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Server.Data
@@ -10,12 +11,12 @@ namespace Server.Data
 
     public class DataManager
     {
-        public static Dictionary<int, Data.Stat> StatDict { get; private set; } = new Dictionary<int, Data.Stat>();
+        public static Dictionary<int, StatInfo> StatDict { get; private set; } = new Dictionary<int, StatInfo>();
         public static Dictionary<int, Data.Skill> SkillDict { get; private set; } = new Dictionary<int, Data.Skill>();
 
         public static void LoadData()
         {
-            StatDict = LoadJson<StatData, int, Stat>("StatData").MakeDict();
+            StatDict = LoadJson<StatData, int, StatInfo>("StatData").MakeDict();
             SkillDict = LoadJson<SkillData, int, Skill>("SkillData").MakeDict();
         }
 

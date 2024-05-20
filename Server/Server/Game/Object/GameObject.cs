@@ -1,5 +1,6 @@
 ﻿using Protocol;
 using Server.Game.Room;
+using System;
 
 namespace Server.Game.Object
 {
@@ -69,6 +70,22 @@ namespace Server.Game.Object
         }
 
         public virtual void OnDamaged(GameObject attacker, int damage)
+        {
+            Stat.Hp = Math.Max(Stat.Hp - damage, 0);
+
+            S_ChangeHp changeHp = new S_ChangeHp();
+            changeHp.ObjectId = Id;
+            changeHp.Hp = Stat.Hp;
+            Room.Broadcast(changeHp);
+
+            if (Stat.Hp <= 0)
+            {
+                OnDead(attacker);
+            }
+
+        }
+
+        public virtual void OnDead(GameObject attacker)
         {
 
         }
