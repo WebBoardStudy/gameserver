@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Managers\Core\SceneManagerEx.cs" />
     <Compile Include="Assets\Scripts\Controllers\MonsterController.cs" />
     <Compile Include="Assets\Scripts\Controllers\MyPlayerController.cs" />
+    <Compile Include="Assets\Scripts\Contents\HpBar.cs" />
     <Compile Include="Assets\Scripts\Managers\Core\SoundManager.cs" />
     <Compile Include="Assets\Scripts\Utils\Define.cs" />
     <Compile Include="Assets\Scripts\Managers\Contents\NetworkManager.cs" />

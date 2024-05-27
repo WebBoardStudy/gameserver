@@ -76,10 +76,7 @@ class PacketHandler
         var cc = go.GetComponent<CreatureController>();
         if (cc != null)
         {
-            cc.Stat.Hp = changeHpPacket.Hp;
-
-            // TODO : UI
-            Debug.Log($"ChangeHP : {changeHpPacket.Hp}");
+            cc.Hp = changeHpPacket.Hp;
         }
 
     }
