@@ -21,7 +21,7 @@ namespace Server
             {
                 MyPlaeyr.info.Name = $"Player_{MyPlaeyr.info.PlayerId}";
                 MyPlaeyr.info.PosInfo.State = CreatureState.Idle;
-                MyPlaeyr.info.PosInfo.MoveDir = MoveDir.None;
+                MyPlaeyr.info.PosInfo.MoveDir = MoveDir.Down;
                 MyPlaeyr.info.PosInfo.PosX = 0;
                 MyPlaeyr.info.PosInfo.PosY = 0;
                 MyPlaeyr.Session = this;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Google.Protobuf;
@@ -143,7 +144,12 @@ public class GameRoom
             Broadcast(skill);
             
             // TODO 데미지 판정
-            
+            var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+            Player target = _map.Find(skillPos);
+            if (target != null)
+            {
+                Console.WriteLine("Hit Player !");
+            }
         }
     }
 
