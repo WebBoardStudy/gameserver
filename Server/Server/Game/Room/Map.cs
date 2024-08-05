@@ -121,7 +121,7 @@ public class Map
 
     public bool ApplyMove(Player player, Vector2Int dest)
     {
-        PositionInfo posInfo = player.info.PosInfo;
+        PositionInfo posInfo = player.Info.PosInfo;
         if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
             return false;
         if (posInfo.PosY < MinY || posInfo.PosY > MaxY)

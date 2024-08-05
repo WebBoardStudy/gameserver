@@ -17,13 +17,13 @@ namespace Server
             Console.WriteLine($"OnConnected : {endPoint}");
 
             // PROTO Test
-            MyPlaeyr = PlayerManager.Instance.Add();
+            MyPlaeyr = ObjectMansger.Instance.Add<Player>();
             {
-                MyPlaeyr.info.Name = $"Player_{MyPlaeyr.info.PlayerId}";
-                MyPlaeyr.info.PosInfo.State = CreatureState.Idle;
-                MyPlaeyr.info.PosInfo.MoveDir = MoveDir.Down;
-                MyPlaeyr.info.PosInfo.PosX = 0;
-                MyPlaeyr.info.PosInfo.PosY = 0;
+                MyPlaeyr.Info.Name = $"Player_{MyPlaeyr.Info.ObjectId}";
+                MyPlaeyr.Info.PosInfo.State = CreatureState.Idle;
+                MyPlaeyr.Info.PosInfo.MoveDir = MoveDir.Down;
+                MyPlaeyr.Info.PosInfo.PosX = 0;
+                MyPlaeyr.Info.PosInfo.PosY = 0;
                 MyPlaeyr.Session = this;
             }
 
@@ -51,7 +51,7 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
-            RoomManager.Instance.Find(1).LeaveGame(MyPlaeyr.info.PlayerId);
+            RoomManager.Instance.Find(1).LeaveGame(MyPlaeyr.Info.ObjectId);
             
             SessionManager.Instance.Remove(this);
 

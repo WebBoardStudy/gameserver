@@ -10,7 +10,7 @@ public class GameRoom
 {
     object _lock = new object();
     public int RoomId { get; set; }
-    
+
     Dictionary<int, Player> _players = new Dictionary<int, Player>();
     Map _map = new Map();
 
@@ -26,13 +26,13 @@ public class GameRoom
 
         lock (_lock)
         {
-            _players.Add(newPlayer.info.PlayerId, newPlayer);
+            _players.Add(newPlayer.Info.ObjectId, newPlayer);
             newPlayer.Room = this;
 
             // 본인 한테 정보 전송
             {
                 S_EnterGame enterPacket = new S_EnterGame();
-                enterPacket.Player = newPlayer.info;
+                enterPacket.Player = newPlayer.Info;
                 newPlayer.Session.Send(enterPacket);
 
                 S_Spawn spawnPacket = new S_Spawn();
@@ -40,7 +40,7 @@ public class GameRoom
                 {
                     if (newPlayer != p)
                     {
-                        spawnPacket.Players.Add(p.info);
+                        spawnPacket.Objects.Add(p.Info);
                     }
                 }
 
@@ -50,7 +50,7 @@ public class GameRoom
             // 타인한테 정보 전송
             {
                 S_Spawn spawnPacket = new S_Spawn();
-                spawnPacket.Players.Add(newPlayer.info);
+                spawnPacket.Objects.Add(newPlayer.Info);
                 foreach (Player p in _players.Values)
                 {
                     if (newPlayer != p)
@@ -65,9 +65,9 @@ public class GameRoom
         lock (_lock)
         {
             Player player = null;
-            if(_players.Remove(playerId, out player) == false)
+            if (_players.Remove(playerId, out player) == false)
                 return;
-            
+
             player.Room = null;
 
             // 본인한테 정보 전송
@@ -79,7 +79,7 @@ public class GameRoom
             // 타인한테 정보 전송
             {
                 S_Despawn despawnPacket = new S_Despawn();
-                despawnPacket.PlayerIds.Add(player.info.PlayerId);
+                despawnPacket.PlayerIds.Add(player.Info.ObjectId);
                 foreach (Player p in _players.Values)
                 {
                     if (player != p)
@@ -100,12 +100,12 @@ public class GameRoom
 
             // 일단 서버에서 좌표 이동
             PositionInfo movePosInfo = movePacket.PosInfo;
-            PlayerInfo info = player.info;
-            
+            ObjectInfo info = player.Info;
+
             // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
             if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
             {
-                if(_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
+                if (_map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
                     return;
             }
 
@@ -115,7 +115,7 @@ public class GameRoom
 
             // 다른 플레이어한테도 알려준다.
             S_Move resMovePacket = new S_Move();
-            resMovePacket.PlayerId = player.info.PlayerId;
+            resMovePacket.PlayerId = player.Info.ObjectId;
             resMovePacket.PosInfo = movePacket.PosInfo;
 
             Broadcast(resMovePacket);
@@ -129,26 +129,33 @@ public class GameRoom
 
         lock (_lock)
         {
-            PlayerInfo info = player.info;
+            ObjectInfo info = player.Info;
             if (info.PosInfo.State != CreatureState.Idle)
                 return;
 
             // TODO : 스킬 사용 가능 여부 체크
-
-            // 통과
+            
             info.PosInfo.State = CreatureState.Skill;
 
             S_Skill skill = new S_Skill() { Info = new SkillInfo() };
-            skill.PlayerId = info.PlayerId;
+            skill.PlayerId = info.ObjectId;
             skill.Info.SkillId = 1;
             Broadcast(skill);
-            
-            // TODO 데미지 판정
-            var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-            Player target = _map.Find(skillPos);
-            if (target != null)
+
+            if (skillPacket.Info.SkillId == 1)
             {
-                Console.WriteLine("Hit Player !");
+                // TODO 데미지 판정
+                var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                Player target = _map.Find(skillPos);
+                if (target != null)
+                {
+                    Console.WriteLine("Hit Player !");
+                }
+            }
+            else if (skillPacket.Info.SkillId == 2)
+            {
+                // TODO : Arrow
+                   
             }
         }
     }
