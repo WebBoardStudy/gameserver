@@ -8,4 +8,10 @@ public class Projectile : GameObject
     {
         ObjectType = GameObjectType.Projectile;
     }
+    
+    public virtual void Update()
+    {
+        // TODO
+        
+    }
 }
