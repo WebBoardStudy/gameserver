@@ -88,7 +88,7 @@ public class Map
     }
 
     bool[,] _collision;
-    GameObject[,] _gameObjects;
+    GameObject[,] _objects;
 
     public bool CanGo(Vector2Int cellPos, bool checkObjects = true)
     {
@@ -99,7 +99,8 @@ public class Map
 
         int x = cellPos.x - MinX;
         int y = MaxY - cellPos.y;
-        return !_collision[y, x] && (!checkObjects || _gameObjects[y, x] == null);
+        
+        return !_collision[y, x] && (!checkObjects || _objects[y, x] == null);
     }
 
     public GameObject Find(Vector2Int cellPos)
@@ -116,7 +117,7 @@ public class Map
 
         int x = cellPos.x - MinX;
         int y = MaxY - cellPos.y;
-        return _gameObjects[y, x];
+        return _objects[y, x];
     }
 
     public bool ApplyLeave(GameObject gameObject)
@@ -130,8 +131,8 @@ public class Map
         {
             int x = posInfo.PosX - MinX;
             int y = MaxY - posInfo.PosY;
-            if (_gameObjects[y, x] == gameObject)
-                _gameObjects[y, x] = null;
+            if (_objects[y, x] == gameObject)
+                _objects[y, x] = null;
         }
 
         return true;
@@ -152,13 +153,13 @@ public class Map
         {
             int x = posInfo.PosX - MinX;
             int y = MaxY - posInfo.PosY;
-            if (_gameObjects[y, x] == gameObject)
-                _gameObjects[y, x] = null;
+            if (_objects[y, x] == gameObject)
+                _objects[y, x] = null;
         }
         {
             int x = dest.x - MinX;
             int y = MaxY - dest.y;
-            _gameObjects[y, x] = gameObject;
+            _objects[y, x] = gameObject;
         }
 
         // 실제 좌표 이동
@@ -184,7 +185,7 @@ public class Map
         int xCount = MaxX - MinX + 1;
         int yCount = MaxY - MinY + 1;
         _collision = new bool[yCount, xCount];
-        _gameObjects = new GameObject[yCount, xCount];
+        _objects = new GameObject[yCount, xCount];
 
         for (int y = 0; y < yCount; y++)
         {

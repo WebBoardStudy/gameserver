@@ -32,7 +32,7 @@ public class GameObject
         set
         {
             PosInfo.PosX = value.x;
-            PosInfo.PosX = value.y;
+            PosInfo.PosY = value.y;
         }
     }
 
