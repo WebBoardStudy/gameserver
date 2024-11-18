@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Game.Object;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.IO;
 using System.Numerics;
 using System.Text;
 
-namespace Server.Game
+namespace Server.Game.Room
 {
     public struct Pos
     {
@@ -59,7 +60,7 @@ namespace Server.Game
         public int SizeY { get { return MaxY - MinY + 1; } }
 
         bool[,] _collision;
-        Player[,] _players;
+        GameObject[,] _objects;
 
         public bool CanGo(Vector2Int cellPos, bool checkObjects = true)
         {
@@ -70,10 +71,10 @@ namespace Server.Game
 
             int x = cellPos.x - MinX;
             int y = MaxY - cellPos.y;
-            return !_collision[y, x] && (!checkObjects || _players[y, x] == null);
+            return !_collision[y, x] && (!checkObjects || _objects[y, x] == null);
         }
 
-        public Player Find(Vector2Int cellPos)
+        public GameObject Find(Vector2Int cellPos)
         {
             if (cellPos.x < MinX || cellPos.x > MaxX)
                 return null;
@@ -83,29 +84,39 @@ namespace Server.Game
             int x = cellPos.x - MinX;
             int y = MaxY - cellPos.y;
 
-            return _players[y, x];
+            return _objects[y, x];
         }
 
-        public bool ApplyMove(Player player, Vector2Int dest)
+        public bool ApplyLeave(GameObject gameObject)
         {
-            PositionInfo posInfo = player.Info.PosInfo;
+            PositionInfo posInfo = gameObject.PosInfo;
             if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
                 return false;
             if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
-                return false;
-            if (CanGo(dest, true) == false)
                 return false;
 
             {
                 int x = posInfo.PosX - MinX;
                 int y = MaxY - posInfo.PosY;
-                if (_players[y, x] == player)
-                    _players[y, x] = null;
+                if (_objects[y, x] == gameObject)
+                    _objects[y, x] = null;
             }
+
+            return true;
+        }
+
+        public bool ApplyMove(GameObject gameObject, Vector2Int dest)
+        {
+            ApplyLeave(gameObject);
+
+            PositionInfo posInfo = gameObject.PosInfo;
+            if (CanGo(dest, true) == false)
+                return false;
+
             {
                 int x = dest.x - MinX;
                 int y = MaxY - dest.y;
-                _players[y, x] = player;
+                _objects[y, x] = gameObject;
             }
 
             // 실제 좌표 이동
@@ -130,14 +141,14 @@ namespace Server.Game
             int xCount = MaxX - MinX + 1;
             int yCount = MaxY - MinY + 1;
             _collision = new bool[yCount, xCount];
-            _players = new Player[yCount, xCount];
+            _objects = new GameObject[yCount, xCount];
 
             for (int y = 0; y < yCount; y++)
             {
                 string line = reader.ReadLine();
                 for (int x = 0; x < xCount; x++)
                 {
-                    _collision[y, x] = (line[x] == '1' ? true : false);
+                    _collision[y, x] = line[x] == '1' ? true : false;
                 }
             }
         }
@@ -168,7 +179,7 @@ namespace Server.Game
             int[,] open = new int[SizeY, SizeX]; // OpenList
             for (int y = 0; y < SizeY; y++)
                 for (int x = 0; x < SizeX; x++)
-                    open[y, x] = Int32.MaxValue;
+                    open[y, x] = int.MaxValue;
 
             Pos[,] parent = new Pos[SizeY, SizeX];
 

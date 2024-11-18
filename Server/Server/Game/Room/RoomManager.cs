@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Server.Game
+namespace Server.Game.Room
 {
     public class RoomManager
     {
@@ -41,7 +41,7 @@ namespace Server.Game
                 GameRoom room = null;
                 if (_rooms.TryGetValue(roomId, out room))
                     return room;
-                    
+
                 return null;
             }
         }
