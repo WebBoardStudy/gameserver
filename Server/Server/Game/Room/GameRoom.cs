@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.data;
 
 namespace Server.Game;
 
@@ -27,7 +28,7 @@ public class GameRoom
             foreach (Projectile projectile in _projectiles.Values)
             {
                 projectile.Update();
-            }            
+            }
         }
     }
 
@@ -190,32 +191,45 @@ public class GameRoom
 
             S_Skill skill = new S_Skill() { Info = new SkillInfo() };
             skill.ObjectId = info.ObjectId;
-            skill.Info.SkillId = 1;
+            skill.Info.SkillId = skillPacket.Info.SkillId;
             Broadcast(skill);
 
-            if (skillPacket.Info.SkillId == 1)
+            Data.Skill skillData = null;
+            if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
             {
-                // TODO 데미지 판정
-                var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                GameObject target = Map.Find(skillPos);
-                if (target != null)
-                {
-                    Console.WriteLine("Hit GameObject !");
-                }
+                return;
             }
-            else if (skillPacket.Info.SkillId == 2)
+
+            switch (skillData.skillType)
             {
-                Arrow arrow = ObjectMansger.Instance.Add<Arrow>();
-                if (arrow == null)
-                    return;
+                case SkillType.SkillAuto:
+                {
+                    // TODO 데미지 판정
+                    var skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                    GameObject target = Map.Find(skillPos);
+                    if (target != null)
+                    {
+                        Console.WriteLine("Hit GameObject !");
+                    }
+                }
+                    break;
+                case SkillType.SkillProjectile:
+                {
+                    Arrow arrow = ObjectMansger.Instance.Add<Arrow>();
+                    if (arrow == null)
+                        return;
 
-                arrow.Owner = player;
-                arrow.PosInfo.State = CreatureState.Moving;
-                arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
-                arrow.PosInfo.PosX = player.PosInfo.PosX;
-                arrow.PosInfo.PosY = player.PosInfo.PosY;
+                    arrow.Owner = player;
+                    arrow.Data = skillData;
+                    arrow.PosInfo.State = CreatureState.Moving;
+                    arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
+                    arrow.PosInfo.PosX = player.PosInfo.PosX;
+                    arrow.PosInfo.PosY = player.PosInfo.PosY;
+                    arrow.Speed = skillData.projectile.speed;
 
-                EnterGame(arrow);
+                    EnterGame(arrow);
+                }
+                    break;
             }
         }
     }

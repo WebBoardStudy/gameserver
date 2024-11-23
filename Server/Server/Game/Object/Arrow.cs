@@ -11,13 +11,14 @@ public class Arrow : Projectile
 
     public override void Update()
     {
-        if (Owner == null || Room == null)
+        if (Data == null || Data.projectile == null || Owner == null || Room == null)
             return;
 
         if (_nextMoveTick >= Environment.TickCount64)
             return;
 
-        _nextMoveTick = Environment.TickCount64 + 50;
+        long tick = (long) (1000 / Data.projectile.speed);
+        _nextMoveTick = Environment.TickCount64 + tick;
 
         Vector2Int destPos = GetFrontCellPos();
         if (Room.Map.CanGo(destPos))
@@ -36,6 +37,8 @@ public class Arrow : Projectile
             if (target != null)
             {
                 // TODO : 피격 판정
+                target.OnDamaged(this, Data.damage);
+                Console.WriteLine($"damage : {Data.damage}");
             }
             
             //소멸

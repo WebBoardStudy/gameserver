@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Server.Game;
 
@@ -17,13 +18,21 @@ public class GameObject
         PosInfo = new PositionInfo()
     };
 
-    public PositionInfo PosInfo { get; private set; } = new PositionInfo();
-
     public GameRoom Room { get; set; }
+    public ObjectInfo info { get; set; } = new ObjectInfo();
+    public PositionInfo PosInfo { get; private set; } = new PositionInfo();
+    public StatInfo Stat { get; private set; } = new StatInfo();
 
+    public float Speed
+    {
+        get { return Stat.Speed; }
+        set { Stat.Speed = value; }
+    }
+    
     public GameObject()
     {
         Info.PosInfo = PosInfo;
+        Info.StatInfo = Stat;
     }
 
     public Vector2Int CellPos
@@ -62,5 +71,10 @@ public class GameObject
         }
 
         return cellPos;
+    }
+
+    public virtual void OnDamaged(GameObject attacker, int damage)
+    {
+        
     }
 }
