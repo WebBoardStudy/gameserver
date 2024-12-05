@@ -41,6 +41,8 @@ public class GameRoom
                     var newPlayer = gameObject as Player;
                     _players.Add(gameObject.Info.ObjectId, gameObject as Player);
 
+                    Map.ApplyMove(newPlayer, new Vector2Int(newPlayer.CellPos.x, newPlayer.CellPos.y));
+
                     // 본인한테 정보 전송
                     {
                         S_EnterGame enterPacket = new S_EnterGame();
@@ -54,12 +56,18 @@ public class GameRoom
                                 spawnPacket.Objects.Add(player.Info);
                             }
                         }
+                        foreach (var m in _monsters.Values)
+                            spawnPacket.Objects.Add(m.Info);
+                        foreach (var p in _projectiles.Values)
+                            spawnPacket.Objects.Add(p.Info);
 
                         newPlayer.Session.Send(spawnPacket);
                     }
                     break;
                 case GameObjectType.Monster:
-                    _monsters.Add(gameObject.Info.ObjectId, gameObject as Monster);
+                    var monster = gameObject as Monster;
+                    _monsters.Add(gameObject.Info.ObjectId, monster);
+                    Map.ApplyMove(monster, new Vector2Int(monster.CellPos.x, monster.CellPos.y));
                     break;
                 case GameObjectType.Projectile:
                     _projectiles.Add(gameObject.Info.ObjectId, gameObject as Projectile);
@@ -239,9 +247,6 @@ public class GameRoom
 
                 EnterGame(arrow);
             }
-
         }
     }
-
-
 }

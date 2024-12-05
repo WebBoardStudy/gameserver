@@ -1,8 +1,6 @@
 ﻿using Protocol;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static Define;
 
 public class MyPlayerController : PlayerController
 {
@@ -117,7 +115,7 @@ public class MyPlayerController : PlayerController
 
         if (Managers.Map.CanGo(destPos))
         {
-            if (Managers.Object.Find(destPos) == null)
+            if (Managers.Object.FindCreature(destPos) == null)
             {
                 CellPos = destPos;
             }

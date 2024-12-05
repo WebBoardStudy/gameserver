@@ -1,7 +1,7 @@
 ﻿using Protocol;
 using UnityEngine;
 
-public class ArrowController : CreatureController
+public class ArrowController : BaseController
 {
 
     protected override void Init()
