@@ -16,6 +16,17 @@ namespace Server.Game.Object
             get { return Info.ObjectId; }
             set { Info.ObjectId = value; }
         }
+        public CreatureState State
+        {
+            get { return PosInfo.State; }
+            set { PosInfo.State = value; }
+        }
+
+        public MoveDir Dir
+        {
+            get { return PosInfo.MoveDir; }
+            set { PosInfo.MoveDir = value; }
+        }
         public GameObject()
         {
             Info.PosInfo = PosInfo;
@@ -69,6 +80,18 @@ namespace Server.Game.Object
             return GetFrontCellPos(PosInfo.MoveDir);
         }
 
+        public static MoveDir GetDirFromVec(Vector2Int dir)
+        {
+            if (dir.x > 0)
+                return MoveDir.Right;
+            else if (dir.x < 0)
+                return MoveDir.Left;
+            else if (dir.y > 0)
+                return MoveDir.Up;
+            else
+                return MoveDir.Down;
+        }
+
         public virtual void OnDamaged(GameObject attacker, int damage)
         {
             Stat.Hp = Math.Max(Stat.Hp - damage, 0);
@@ -104,6 +127,11 @@ namespace Server.Game.Object
 
             gameRoom.EnterGame(this);
 
+
+        }
+
+        public virtual void Update()
+        {
 
         }
     }

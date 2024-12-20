@@ -21,6 +21,10 @@ public class GameRoom
     public void Init(int mapId)
     {
         Map.LoadMap(mapId);
+
+        Monster mon = ObjectManager.Instance.Add<Monster>();
+        mon.CellPos = new Vector2Int(5, 5);
+        EnterGame(mon);
     }
 
     public void EnterGame(GameObject gameObject)
@@ -142,6 +146,11 @@ public class GameRoom
     {
         lock (_lock)
         {
+            foreach (var item in _monsters.Values)
+            {
+                item?.Update();
+            }
+
             foreach (var item in _projectiles.Values)
             {
                 item.Update();
@@ -247,6 +256,19 @@ public class GameRoom
 
                 EnterGame(arrow);
             }
+        }
+    }
+
+    public Player FindPlayer(Func<GameObject, bool> condition)
+    {
+        lock (_lock)
+        {
+            foreach (var player in _players.Values)
+            {
+                if (condition.Invoke(player))
+                    return player;
+            }
+            return null;
         }
     }
 }

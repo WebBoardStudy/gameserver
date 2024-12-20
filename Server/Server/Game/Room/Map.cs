@@ -30,6 +30,15 @@ namespace Server.Game.Room
         {
             return new Vector2Int(left.x + right.x, left.y + right.y);
         }
+
+        public static Vector2Int operator -(Vector2Int left, Vector2Int right)
+        {
+            return new Vector2Int(left.x - right.x, left.y - right.y);
+        }
+
+        public int sqrMagnitude { get { return x * x + y * y; } }
+        public float magnitude { get { return (float)Math.Sqrt(sqrMagnitude); } }
+        public int cellDistFromZero { get { return Math.Abs(x) + Math.Abs(y); } }
     }
 
     public struct PQNode : IComparable<PQNode>
@@ -156,7 +165,7 @@ namespace Server.Game.Room
         int[] _deltaX = new int[] { 0, 0, -1, 1 };
         int[] _cost = new int[] { 10, 10, 10, 10 };
 
-        public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool ignoreDestCollision = false)
+        public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObject = false)
         {
             List<Pos> path = new List<Pos>();
 
@@ -212,9 +221,9 @@ namespace Server.Game.Room
 
                     // 유효 범위를 벗어났으면 스킵
                     // 벽으로 막혀서 갈 수 없으면 스킵
-                    if (!ignoreDestCollision || next.Y != dest.Y || next.X != dest.X)
+                    if (next.Y != dest.Y || next.X != dest.X)
                     {
-                        if (CanGo(Pos2Cell(next)) == false) // CellPos
+                        if (CanGo(Pos2Cell(next), checkObject) == false) // CellPos
                             continue;
                     }
 
