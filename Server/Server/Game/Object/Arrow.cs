@@ -40,7 +40,7 @@ namespace Server.Game.Object
                 if (target != null)
                 {
                     // TODO: 피격 판정
-                    target.OnDamaged(this, Data.damage);
+                    target.OnDamaged(this, Data.damage + Owner.Stat.Attack);
 
                 }
 
