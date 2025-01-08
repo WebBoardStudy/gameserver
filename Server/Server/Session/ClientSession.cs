@@ -2,6 +2,7 @@
 using System.Net;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.data;
 using Server.Game;
 using ServerCore;
 
@@ -24,9 +25,14 @@ namespace Server
                 MyPlaeyr.Info.PosInfo.MoveDir = MoveDir.Down;
                 MyPlaeyr.Info.PosInfo.PosX = 0;
                 MyPlaeyr.Info.PosInfo.PosY = 0;
+                
+                StatInfo stat = null;
+                DataManager.StatDict.TryGetValue(1, out stat);
+                MyPlaeyr.Stat.MergeFrom(stat);
+            
                 MyPlaeyr.Session = this;
             }
-
+            
             RoomManager.Instance.Find(1).EnterGame(MyPlaeyr);
         }
 

@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Protocol;
+﻿using System;
+using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
 
 namespace Server.Game;
@@ -12,7 +13,7 @@ public class GameObject
         get { return Info.ObjectId; }
         set { Info.ObjectId = value; }
     }
-    
+
     public ObjectInfo Info { get; set; } = new ObjectInfo()
     {
         PosInfo = new PositionInfo()
@@ -28,7 +29,7 @@ public class GameObject
         get { return Stat.Speed; }
         set { Stat.Speed = value; }
     }
-    
+
     public GameObject()
     {
         Info.PosInfo = PosInfo;
@@ -75,6 +76,20 @@ public class GameObject
 
     public virtual void OnDamaged(GameObject attacker, int damage)
     {
+        Stat.Hp = Math.Max(Stat.Hp - damage, 0);
         
+        S_ChangeHp changePaket = new S_ChangeHp();
+        changePaket.ObjectId = Id;
+        changePaket.Hp = Stat.Hp;
+        Room.Broadcast(changePaket);
+     
+        if (Stat.Hp <= 0)
+        {
+            OnDead(attacker);
+        }
+    }
+
+    public virtual void OnDead(GameObject attacker)
+    {
     }
 }

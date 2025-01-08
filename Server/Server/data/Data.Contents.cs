@@ -17,15 +17,15 @@ namespace Server.Data
     }
 
     [Serializable]
-    public class StatData : ILoader<int, Stat>
+    public class StatData : ILoader<int, StatInfo>
     {
-        public List<Stat> stats = new List<Stat>();
+        public List<StatInfo> stats = new List<StatInfo>();
 
-        public Dictionary<int, Stat> MakeDict()
+        public Dictionary<int, StatInfo> MakeDict()
         {
-            Dictionary<int, Stat> dict = new Dictionary<int, Stat>();
-            foreach (Stat stat in stats)
-                dict.Add(stat.level, stat);
+            Dictionary<int, StatInfo> dict = new Dictionary<int, StatInfo>();
+            foreach (StatInfo stat in stats)
+                dict.Add(stat.Level, stat);
             return dict;
         }
     }

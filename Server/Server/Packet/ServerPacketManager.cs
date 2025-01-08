@@ -48,10 +48,9 @@ class PacketManager
 		T pkt = new T();
 		pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
 
-
-		if (CustomHandler != null) 
+		if (CustomHandler != null)
 		{
-            CustomHandler.Invoke(session, pkt, id);
+			CustomHandler.Invoke(session, pkt, id);
 		}
 		else
 		{

@@ -11,11 +11,15 @@ public class Player : GameObject
     {
         ObjectType = GameObjectType.Player;
         Speed = 20.0f;
-        
     }
 
     public override void OnDamaged(GameObject attcker, int damage)
     {
-        Console.WriteLine($"TODO : damage {damage}");
+        base.OnDamaged(attcker, damage);
+    }
+
+    public override void OnDead(GameObject attacker)
+    {
+        base.OnDead(attacker);
     }
 }
