@@ -25,7 +25,10 @@ namespace Server.Data
         {
             Dictionary<int, StatInfo> dict = new Dictionary<int, StatInfo>();
             foreach (StatInfo stat in stats)
+            {
+                stat.Hp = stat.MaxHp;
                 dict.Add(stat.Level, stat);
+            }
             return dict;
         }
     }

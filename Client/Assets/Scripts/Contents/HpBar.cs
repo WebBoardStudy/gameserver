@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class HpBar : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Transform _hpBar = null;
 
-    // Update is called once per frame
-    void Update()
+    public void SetHpBar(float ratio)
     {
-        
+        ratio = Mathf.Clamp(ratio, 0, 1);
+        _hpBar.localScale = new Vector3(ratio, 1, 1);
     }
 }
