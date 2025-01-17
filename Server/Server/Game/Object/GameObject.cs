@@ -39,6 +39,12 @@ namespace Server.Game.Object
             set { Stat.Speed = value; }
         }
 
+        public int Hp
+        {
+            get { return Stat.Hp; }
+            set { Stat.Hp = Math.Clamp(value, 0, Stat.MaxHp); }
+        }
+
         public Vector2Int CellPos
         {
             get
