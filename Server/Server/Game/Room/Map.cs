@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Google.Protobuf.Protocol;
+using ServerCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Google.Protobuf.Protocol;
-using ServerCore;
-
-namespace Server.Game;
+using System.Text;
+using Server.Game;
 
 public struct Pos
 {
@@ -74,7 +74,6 @@ public struct Vector2Int
         return new Vector2Int(a.x - b.x, a.y - b.y);
     }
 
-
     public float magnitude
     {
         get { return (float)Math.Sqrt(sqrMagnitude); }
@@ -120,21 +119,15 @@ public class Map
 
         int x = cellPos.x - MinX;
         int y = MaxY - cellPos.y;
-
         return !_collision[y, x] && (!checkObjects || _objects[y, x] == null);
     }
 
     public GameObject Find(Vector2Int cellPos)
     {
         if (cellPos.x < MinX || cellPos.x > MaxX)
-        {
             return null;
-        }
-
         if (cellPos.y < MinY || cellPos.y > MaxY)
-        {
             return null;
-        }
 
         int x = cellPos.x - MinX;
         int y = MaxY - cellPos.y;
@@ -162,21 +155,11 @@ public class Map
     public bool ApplyMove(GameObject gameObject, Vector2Int dest)
     {
         ApplyLeave(gameObject);
-        PositionInfo posInfo = gameObject.PosInfo;
-        if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
-            return false;
-        if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
-            return false;
 
+        PositionInfo posInfo = gameObject.PosInfo;
         if (CanGo(dest, true) == false)
             return false;
 
-        {
-            int x = posInfo.PosX - MinX;
-            int y = MaxY - posInfo.PosY;
-            if (_objects[y, x] == gameObject)
-                _objects[y, x] = null;
-        }
         {
             int x = dest.x - MinX;
             int y = MaxY - dest.y;
@@ -186,7 +169,6 @@ public class Map
         // 실제 좌표 이동
         posInfo.PosX = dest.x;
         posInfo.PosY = dest.y;
-
         return true;
     }
 

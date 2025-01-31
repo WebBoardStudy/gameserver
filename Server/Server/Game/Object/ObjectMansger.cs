@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
+using Server.Game;
 
-namespace Server.Game;
-
-public class ObjectMansger
+public class ObjectManager
 {
-    public static ObjectMansger Instance { get; } = new ObjectMansger();
-    object _lock = new object();
+    public static ObjectManager Instance { get; } = new ObjectManager();
 
+    object _lock = new object();
     Dictionary<int, Player> _players = new Dictionary<int, Player>();
 
-    // [UNUSED(1)[TYPE(7)][ID(24)]
-    int _counter = 0; //TODO
+    // [UNUSED(1)][TYPE(7)][ID(24)]
+    int _counter = 0;
 
     public T Add<T>() where T : GameObject, new()
     {
@@ -20,7 +19,7 @@ public class ObjectMansger
         lock (_lock)
         {
             gameObject.Id = GenerateId(gameObject.ObjectType);
-            
+
             if (gameObject.ObjectType == GameObjectType.Player)
             {
                 _players.Add(gameObject.Id, gameObject as Player);
@@ -43,15 +42,15 @@ public class ObjectMansger
         int type = (id >> 24) & 0x7F;
         return (GameObjectType)type;
     }
-    
+
     public bool Remove(int objectId)
     {
         GameObjectType objectType = GetObjectTypeById(objectId);
-        
+
         lock (_lock)
         {
-            if(objectType == GameObjectType.Player)
-            return _players.Remove(objectId);
+            if (objectType == GameObjectType.Player)
+                return _players.Remove(objectId);
         }
 
         return false;
@@ -60,7 +59,7 @@ public class ObjectMansger
     public Player Find(int objectId)
     {
         GameObjectType objectType = GetObjectTypeById(objectId);
-        
+
         lock (_lock)
         {
             if (objectType == GameObjectType.Player)

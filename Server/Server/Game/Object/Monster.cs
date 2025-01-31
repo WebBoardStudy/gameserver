@@ -14,11 +14,12 @@ public class Monster : GameObject
         Stat.Level = 1;
         Stat.Hp = 100;
         Stat.MaxHp = 100;
+        Stat.Speed = 5.0f;
 
         State = CreatureState.Idle;
     }
 
-    // FSM(Finite State Machine)
+    // FSM (Finite State Machine)
     public override void Update()
     {
         switch (State)
@@ -33,12 +34,12 @@ public class Monster : GameObject
                 UpdateSkill();
                 break;
             case CreatureState.Dead:
-                updateDead();
+                UpdateDead();
                 break;
         }
     }
 
-    private Player _target;
+    Player _target;
     int _searchCellDist = 10;
     int _chaseCellDist = 20;
 
@@ -63,12 +64,14 @@ public class Monster : GameObject
         State = CreatureState.Moving;
     }
 
+    long _nextMoveTick = 0;
+
     protected virtual void UpdateMoving()
     {
-        if (_nextSearchTick > Environment.TickCount64)
+        if (_nextMoveTick > Environment.TickCount64)
             return;
         int moveTick = (int)(1000 / Speed);
-        _nextSearchTick = Environment.TickCount64 + 1000;
+        _nextMoveTick = Environment.TickCount64 + moveTick;
 
         if (_target == null || _target.Room != Room)
         {
@@ -96,8 +99,8 @@ public class Monster : GameObject
         // 이동
         Dir = GetDirFromVec(path[1] - CellPos);
         Room.Map.ApplyMove(this, path[1]);
-        
-        // 다른 플레이어 한테도 알려준다
+
+        // 다른 플레이어한테도 알려준다
         S_Move movePacket = new S_Move();
         movePacket.ObjectId = Id;
         movePacket.PosInfo = PosInfo;
@@ -108,7 +111,7 @@ public class Monster : GameObject
     {
     }
 
-    protected virtual void updateDead()
+    protected virtual void UpdateDead()
     {
     }
 }

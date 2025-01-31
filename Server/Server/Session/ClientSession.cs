@@ -16,9 +16,9 @@ namespace Server
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
-
+            
             // PROTO Test
-            MyPlaeyr = ObjectMansger.Instance.Add<Player>();
+            MyPlaeyr = ObjectManager.Instance.Add<Player>();
             {
                 MyPlaeyr.Info.Name = $"Player_{MyPlaeyr.Info.ObjectId}";
                 MyPlaeyr.Info.PosInfo.State = CreatureState.Idle;
