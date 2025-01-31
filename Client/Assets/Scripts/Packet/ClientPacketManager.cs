@@ -37,6 +37,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SSkill, PacketHandler.S_SkillHandler);		
 		_onRecv.Add((ushort)MsgId.SChangeHp, MakePacket<S_ChangeHp>);
 		_handler.Add((ushort)MsgId.SChangeHp, PacketHandler.S_ChangeHpHandler);		
+		_onRecv.Add((ushort)MsgId.SDie, MakePacket<S_Die>);
+		_handler.Add((ushort)MsgId.SDie, PacketHandler.S_DieHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
@@ -58,9 +60,10 @@ class PacketManager
 		T pkt = new T();
 		pkt.MergeFrom(buffer.Array, buffer.Offset + 4, buffer.Count - 4);
 
-		if (CustomHandler != null)
+
+		if (CustomHandler != null) 
 		{
-			CustomHandler.Invoke(session, pkt, id);
+            CustomHandler.Invoke(session, pkt, id);
 		}
 		else
 		{

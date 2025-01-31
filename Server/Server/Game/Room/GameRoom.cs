@@ -19,12 +19,21 @@ public class GameRoom
     public void Init(int mapId)
     {
         Map.LoadMap(mapId);
+        // TEMP
+        Monster monster = ObjectMansger.Instance.Add<Monster>();
+        monster.CellPos = new Vector2Int();
+        EnterGame(monster);
     }
 
     public void Update()
     {
         lock (_lock)
         {
+            foreach (Monster monster in _monsters.Values)
+            {
+                monster.Update();
+            }
+            
             foreach (Projectile projectile in _projectiles.Values)
             {
                 projectile.Update();
@@ -232,6 +241,17 @@ public class GameRoom
                     break;
             }
         }
+    }
+
+    public Player FindPlayer(Func<GameObject, bool> condition)
+    {
+        foreach (Player player in _players.Values)
+        {
+            if (condition.Invoke(player))
+                return player;
+        }
+
+        return null;
     }
 
 
