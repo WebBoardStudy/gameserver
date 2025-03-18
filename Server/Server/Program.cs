@@ -3,6 +3,7 @@ using Server.Game.Room;
 using ServerCore;
 using System;
 using System.Net;
+using System.Threading;
 
 namespace Server
 {
@@ -30,14 +31,12 @@ namespace Server
             _listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
             Console.WriteLine("Listening...");
 
-            //FlushRoom();
-            //JobTimer.Instance.Push(FlushRoom);
 
             while (true)
             {
-                //JobTimer.Instance.Flush();
-                RoomManager.Instance.Find(1).Update();
-                //Thread.Sleep(100);
+                var gameRoom = RoomManager.Instance.Find(1);
+                gameRoom.Push(gameRoom.Update);
+                Thread.Sleep(100);
             }
         }
     }

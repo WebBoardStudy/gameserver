@@ -3,8 +3,6 @@ using Protocol;
 using Server;
 using ServerCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 class PacketHandler
 {
@@ -23,7 +21,7 @@ class PacketHandler
         if (room == null)
             return;
 
-        room.HandleMove(player, movePacket);
+        room.Push(room.HandleMove, player, movePacket);
     }
 
     public static void C_SkillHandler(PacketSession session, IMessage packet)
@@ -39,6 +37,6 @@ class PacketHandler
         if (room == null)
             return;
 
-        room.HandleSkill(player, skillPacket);
+        room.Push(room.HandleSkill, player, skillPacket);
     }
 }

@@ -123,7 +123,7 @@ namespace Server.Game.Object
             diePk.AttackerId = attacker.Id;
             gameRoom.Broadcast(diePk);
 
-            gameRoom.LeaveGame(Id);
+            gameRoom.Push(gameRoom.LeaveGame, Id);
 
             Stat.Hp = Stat.MaxHp;
             PosInfo.State = CreatureState.Idle;
@@ -131,7 +131,7 @@ namespace Server.Game.Object
             PosInfo.PosX = 0;
             PosInfo.PosY = 0;
 
-            gameRoom.EnterGame(this);
+            gameRoom.Push(gameRoom.EnterGame, this);
 
 
         }

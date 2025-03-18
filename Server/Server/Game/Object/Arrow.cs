@@ -39,7 +39,8 @@ namespace Server.Game.Object
                     target.OnDamaged(this, Data.damage + Owner.Stat.Attack);
                 }
 
-                Room.LeaveGame(Id);
+                var gameRoom = Room;
+                gameRoom.Push(gameRoom.LeaveGame, Id);
             }
         }
     }
