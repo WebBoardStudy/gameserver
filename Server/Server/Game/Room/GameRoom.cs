@@ -25,6 +25,14 @@ public class GameRoom : JobSerializer
         Monster mon = ObjectManager.Instance.Add<Monster>();
         mon.CellPos = new Vector2Int(5, 5);
         EnterGame(mon);
+
+        TestTimer();
+    }
+
+    void TestTimer()
+    {
+        Console.WriteLine("Test Timer!");
+        PushAfter(1000, TestTimer);
     }
 
     public void EnterGame(GameObject gameObject)
@@ -103,8 +111,8 @@ public class GameRoom : JobSerializer
                 if (player == null)
                     return;
 
-            player.Room = null;
             Map.ApplyLeave(player);
+            player.Room = null;
             {
                 S_LeaveGame leavePk = new S_LeaveGame();
                 player.Session.Send(leavePk);
@@ -116,8 +124,9 @@ public class GameRoom : JobSerializer
             if (_monsters.Remove(objectId, out monster))
                 if (monster == null)
                     return;
-            monster.Room = null;
+
             Map.ApplyLeave(monster);
+            monster.Room = null;
         }
         else if (type == GameObjectType.Projectile)
         {
@@ -151,6 +160,8 @@ public class GameRoom : JobSerializer
         {
             item.Update();
         }
+
+        Flush();
     }
 
     public void Broadcast(IMessage packet)
@@ -244,7 +255,7 @@ public class GameRoom : JobSerializer
             arrow.PosInfo.PosY = player.PosInfo.PosY;
             arrow.Speed = sk.projectile.speed;
 
-            EnterGame(arrow);
+            Push(EnterGame, arrow);
         }
 
     }

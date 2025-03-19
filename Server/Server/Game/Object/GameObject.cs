@@ -102,6 +102,11 @@ namespace Server.Game.Object
         {
             Stat.Hp = Math.Max(Stat.Hp - damage, 0);
 
+            if (Room == null)
+            {
+                return;
+            }
+
             S_ChangeHp changeHp = new S_ChangeHp();
             changeHp.ObjectId = Id;
             changeHp.Hp = Stat.Hp;
@@ -117,13 +122,17 @@ namespace Server.Game.Object
         public virtual void OnDead(GameObject attacker)
         {
             var gameRoom = Room;
+            if (gameRoom == null)
+            {
+                return;
+            }
 
             var diePk = new S_Die();
             diePk.ObjectId = Id;
             diePk.AttackerId = attacker.Id;
             gameRoom.Broadcast(diePk);
 
-            gameRoom.Push(gameRoom.LeaveGame, Id);
+            gameRoom.LeaveGame(Id);
 
             Stat.Hp = Stat.MaxHp;
             PosInfo.State = CreatureState.Idle;
@@ -131,9 +140,7 @@ namespace Server.Game.Object
             PosInfo.PosX = 0;
             PosInfo.PosY = 0;
 
-            gameRoom.Push(gameRoom.EnterGame, this);
-
-
+            gameRoom.EnterGame(this);
         }
 
         public virtual void Update()
