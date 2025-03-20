@@ -2,7 +2,6 @@
 using Protocol;
 using Server;
 using ServerCore;
-using System;
 
 class PacketHandler
 {
@@ -12,7 +11,7 @@ class PacketHandler
         if (movePacket == null)
             return;
         ClientSession clientSession = session as ClientSession;
-        Console.WriteLine($"C_Move [{clientSession.MyPlayer.Info.ObjectId}] : ({movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY})");
+        //Console.WriteLine($"C_Move [{clientSession.MyPlayer.Info.ObjectId}] : ({movePacket.PosInfo.PosX} , {movePacket.PosInfo.PosY})");
 
         var player = clientSession.MyPlayer;
         if (player == null)

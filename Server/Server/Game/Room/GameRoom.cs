@@ -26,7 +26,7 @@ public class GameRoom : JobSerializer
         mon.CellPos = new Vector2Int(5, 5);
         EnterGame(mon);
 
-        TestTimer();
+        //TestTimer();
     }
 
     void TestTimer()
