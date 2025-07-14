@@ -5,32 +5,52 @@ using System.Collections.Generic;
 using System.Text;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Server.Game;
 
 class PacketHandler
 {
 	public static void C_MoveHandler(PacketSession session, IMessage packet)
 	{
+		// Console.WriteLine("C_MoveHandler");
+		
 		C_Move movePacket = packet as C_Move;
 		ClientSession clientSession = session as ClientSession;
 
-		Console.WriteLine($"C_Move ({movePacket.PosInfo.PosX}, {movePacket.PosInfo.PosY})");
+		// Console.WriteLine($"C_Move ({movePacket.PosInfo.PosX}, {movePacket.PosInfo.PosY})");
 
-		if (clientSession.MyPlayer == null)
+		Player player = clientSession.MyPlayer;
+		if (player == null)
 			return;
-		if (clientSession.MyPlayer.Room == null)
+
+		GameRoom room = player.Room;
+		if (room == null)
 			return;
 
-		// TODO : 검증
+		room.HandleMove(player, movePacket);
+	}
+	
+	public static void C_SkillHandler(PacketSession session, IMessage packet)
+	{
+		Console.WriteLine("C_SkillHandler");
+		
+		C_Skill skillPacket = packet as C_Skill;
+		ClientSession clientSession = session as ClientSession;
+		
+		Player player = clientSession.MyPlayer;
+		if (player == null)
+		{
+			Console.WriteLine("return C_SkillHandler player is null");		
+			return;
+		}
+			
 
-		// 일단 서버에서 좌표 이동
-		PlayerInfo info = clientSession.MyPlayer.Info;
-		info.PosInfo = movePacket.PosInfo;
-
-		// 다른 플레이어한테도 알려준다
-		S_Move resMovePacket = new S_Move();
-		resMovePacket.PlayerId = clientSession.MyPlayer.Info.PlayerId;
-		resMovePacket.PosInfo = movePacket.PosInfo;
-
-		clientSession.MyPlayer.Room.Broadcast(resMovePacket);
+		GameRoom room = player.Room;
+		if (room == null)
+		{
+			Console.WriteLine("return C_SkillHandler room is null");
+			return;
+		}
+		
+		room.HandleSkill(player, skillPacket);
 	}
 }

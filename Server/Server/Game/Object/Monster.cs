@@ -1,0 +1,108 @@
+using System;
+using Google.Protobuf.Protocol;
+
+namespace Server.Game;
+
+public class Monster : GameObject
+{
+    public Monster()
+    {
+        ObjectType = GameObjectType.Monster;
+        
+        // TEMP
+        Stat.Level = 1;
+        Stat.Hp = 100;
+        Stat.MaxHp = 100;
+        Stat.Speed = 5.0f;
+
+        State = CreatureState.Idle;
+    }
+    
+    // FSM (Finite State Machine)
+    public override void Update()
+    {
+        switch (State)
+        {
+            case CreatureState.Idle:
+                UpdateIdle();
+                break;
+            case CreatureState.Moving:
+                UpdateMoving();
+                break;
+            case CreatureState.Skill:
+                UpdateSkill();
+                break;
+            case CreatureState.Dead:
+                UpdateDead();
+                break;
+        }
+    }
+
+    private Player _target;
+    private int _searchCellDist = 10;
+    private int _chaseCellDist = 20;
+    
+    private long _nextSearchTick = 0;
+    protected virtual void UpdateIdle()
+    {
+        if (_nextSearchTick > Environment.TickCount64)
+        {
+            return;
+        }
+
+        _nextSearchTick = Environment.TickCount64 + 1000;
+
+        Player target = Room.FindPlayer(p =>
+        {
+            Vector2Int dir = p.CellPos - CellPos;
+            return dir.cellDistFromZero <= _searchCellDist;
+        });
+
+        if (target == null)
+        {
+            return;
+        }
+
+        _target = target;
+        State = CreatureState.Moving;
+    }
+
+    private long _nextMoveTick = 0;
+    protected virtual void UpdateMoving()
+    {
+        if (_nextSearchTick > Environment.TickCount64)
+        {
+            return;
+        }
+
+        int moveTick = (int) (1000 / Speed);
+        _nextMoveTick = Environment.TickCount64 + moveTick;
+        
+        if (_target == null || _target.Room != Room)
+        {
+            _target = null;
+            State = CreatureState.Idle;
+            return;
+        }
+
+        int dist = (_target.CellPos - CellPos).cellDistFromZero;
+        if (dist == 0 || dist > _chaseCellDist)
+        {
+            _target = null;
+            State = CreatureState.Idle;
+            return;
+        }
+
+        Room.Map.FindPath(CellPos, _target.CellPos);
+    }
+    
+    protected virtual void UpdateSkill()
+    {
+        
+    }
+    
+    protected virtual void UpdateDead()
+    {
+        
+    }
+}

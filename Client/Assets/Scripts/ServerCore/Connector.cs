@@ -15,7 +15,7 @@ namespace ServerCore
 		{
 			for (int i = 0; i < count; i++)
 			{
-				Debug.Log("Connector Connect start...");
+				Debug.Log($"Connector Connect start... {endPoint}");
 				
 				// 휴대폰 설정
 				Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
